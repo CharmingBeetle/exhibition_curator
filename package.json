@@ -1,0 +1,25 @@
+{
+  "name": "exhibition_curator",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "npm run dev:frontend",
+    "dev:frontend": "cd frontend && npm run dev"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CharmingBeetle/exhibition_curator.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/CharmingBeetle/exhibition_curator/issues"
+  },
+  "homepage": "https://github.com/CharmingBeetle/exhibition_curator#readme",
+  "dependencies": {
+    "dotenv": "^17.2.2"
+  }
+}
