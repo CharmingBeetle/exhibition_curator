@@ -8,21 +8,19 @@ const HARVARD_API_KEY = import.meta.env.VITE_HARVARD_API_KEY;
 export const searchArtworks = async (filters: SearchFilters): Promise<Artwork[]> => {
     try {
         
-        let results: Artwork[] = []; //stores all search results
+        let results: Artwork[] = []; //store all search results
 
-        // Check if user wants to search Met Museum (either "met" or "all")
         if (filters.museum === "met" || filters.museum === "all") {
-            // Call the Met Museum search function and wait for results
+          
             const metResults = await searchMetMuseum(filters);
-            // Add Met results to our main results array (spread operator adds each item individually)
+           
             results.push(...metResults);
         }
         
-        // Check if user wants to search Harvard Museum (either "harvard" or "all")
         if (filters.museum === "harvard" || filters.museum === "all") {
-            // Call the Harvard Museum search function and wait for results
+     
             const harvardResults = await searchHarvardMuseum(filters);
-            // Add Harvard results to our main results array
+         
             results.push(...harvardResults);
         }
         
@@ -54,9 +52,8 @@ const searchMetMuseum = async (filters: SearchFilters): Promise<Artwork[]> => {
             `${MET_API_URL}/search?${params.toString()}`
         );
         
-        //check results output
         if (!searchResponse.data.objectIDs || searchResponse.data.objectIDs.length === 0) {
-            return []; //empty array if no results
+            return []; 
         }
 
         // get first 10 art objects
@@ -67,7 +64,6 @@ const searchMetMuseum = async (filters: SearchFilters): Promise<Artwork[]> => {
 
         const artworkDetails = await Promise.all(artworkPromises);
         
-        // Filter out any null results (in case some API calls failed) and return
         return artworkDetails.filter(artwork => artwork !== null) as Artwork[];
 
     } catch (error) {
