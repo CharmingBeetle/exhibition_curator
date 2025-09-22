@@ -1,14 +1,13 @@
 import './App.css'
 import Header from './components/Header'
-import SearchBar from './components/SearchBar'
-
+import SearchSection from './components/SearchSection'
 
 
 function App() {
   return (
     <div className="app">
       <Header />
-      <SearchBar />
+      <SearchSection />
       
       <main>
         <h2>Welcome to Assemblé</h2>

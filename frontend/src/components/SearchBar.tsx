@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { searchArtworks } from '../services/museumApi'
 import { type Artwork, type SearchFilters } from '../types/artwork'
+import FilterSortButtons from './FilterSort'
 
 
 function SearchBar () {
@@ -52,6 +53,7 @@ function SearchBar () {
                 type="submit" 
                 disabled={loading} 
                 onClick={() => handleSearch({...filters, query})}>Search</button>
+                
         </div>
     )
 }
