@@ -1,4 +1,4 @@
-# Exhibition Curator
+# Assemblé (Exhibition Curator)
 
 A web application for creating virtual exhibitions from museum collections using multiple museum APIs.
 
@@ -29,7 +29,7 @@ exhibition_curator/
 
 1. **Install dependencies:**
    ```bash
-   npm run install:all
+   npm run install
    ```
 
 2. **Start development server:**
@@ -56,3 +56,4 @@ exhibition_curator/
 - Backend API for data persistence
 - Additional museum APIs
 - Social sharing features
+
