@@ -102,10 +102,18 @@ const getMetObjectDetails = async (id: number): Promise<Artwork | null> => {
     // search artworks from harvard
 const searchHarvardMuseum = async (filters: SearchFilters): Promise<Artwork[]> => {
     try {
-        const response = await axios.get(`${HARVARD_API_URL}?apikey=${HARVARD_API_KEY}`, { params: filters });
-        
-        
-        return response.data.records.map((record: any) => ({
+        const params = new URLSearchParams();
+        params.append('apikey', HARVARD_API_KEY);
+        params.append("size", "10");
+
+        if (filters.query) {
+            params.append('title', filters.query);
+        }
+
+
+        const response = await axios.get(`${HARVARD_API_URL}?${params.toString()}`);
+
+        const allResults = response.data.records.map((record: any) => ({
             id: record.id.toString(),
             title: record.title || 'Untitled',
             artist: record.people?.[0]?.name || "Unknown", 
@@ -119,7 +127,15 @@ const searchHarvardMuseum = async (filters: SearchFilters): Promise<Artwork[]> =
             dimensions: record.dimensions,
             museum: 'harvard' as const,
             museumUrl: record.url
-        }));
+        }))
+
+        if (filters.hasImage) {
+            return allResults.filter(artwork => artwork.image)
+        } else {
+            return allResults;
+        }
+
+
     } catch (error) {
         console.error("Error searching Harvard Museum:", error);
         return [];
