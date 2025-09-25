@@ -30,6 +30,7 @@ function FilterSort({filters, setFilters, onFilterChange}: {filters: SearchFilte
       <p>Filter by museum:</p>
       <select
         id="filter-button"
+        value={filters.museum}
         onChange={(e) => handleFilter(e.target.value)}>
         <option value="all">All Museums</option>
         <option value="met">Metropolitan Museum of Art</option>

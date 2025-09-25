@@ -3,9 +3,11 @@ import { type Artwork } from '../types/artwork'
 
 type ResultsSectionProps = {
     results: Artwork[]
+    addToExhibition: (artwork: Artwork) => void
+    removeFromExhibition: (artwork: Artwork) => void
 }
 
-function ResultsSection({ results }: ResultsSectionProps) {
+function ResultsSection({ results, addToExhibition, removeFromExhibition }: ResultsSectionProps) {
 
     return (
         <div>
@@ -20,10 +22,16 @@ function ResultsSection({ results }: ResultsSectionProps) {
                     alt={result.title} 
                     width="200"
                     height="200"
+                    onError={(e) => {
+                        e.currentTarget.src = 'https://picsum.photos/id/321/200/200/?blur=5'
+                    }}
                     /> 
                     <p>Title: {result.title}</p>
                     <p>Artist: {result.artist}</p>
                     <p>Museum: {result.museum}</p>
+                    <button onClick={() => addToExhibition(result)}>Add</button>
+                    <button onClick={() => removeFromExhibition(result)}>Remove</button>
+
                 </div>
             ))
             }

@@ -7,26 +7,28 @@ const HARVARD_API_KEY = import.meta.env.VITE_HARVARD_API_KEY;
 
 export const searchArtworks = async (filters: SearchFilters): Promise<Artwork[]> => {
     try {
+        console.log("Searching with filters:", filters)
+        console.log("filters.museum value:", filters.museum)
+        console.log("filters.museum type:", typeof filters.museum)
         
         let results: Artwork[] = []; //store all search results
 
         if (filters.museum === "met" || filters.museum === "all") {
-          
+          console.log("Searching Met Museum...")
             const metResults = await searchMetMuseum(filters);
-           
+           console.log("Met Museum results:", metResults.length)
             results.push(...metResults);
         }
         
         if (filters.museum === "harvard" || filters.museum === "all") {
-     
+            console.log("Searching Harvard Museum...")
             const harvardResults = await searchHarvardMuseum(filters);
-         
+            console.log("Harvard Museum results:", harvardResults.length)
             results.push(...harvardResults);
         }
-        
+        console.log("Total results:", results.length)
         return results;
     } catch (error) {
-     
         console.error("Error searching for artworks:", error);
         return [];
     }
@@ -130,7 +132,7 @@ const searchHarvardMuseum = async (filters: SearchFilters): Promise<Artwork[]> =
         }))
 
         if (filters.hasImage) {
-            return allResults.filter(artwork => artwork.image)
+            return allResults.filter((artwork: any) => artwork.image)
         } else {
             return allResults;
         }
