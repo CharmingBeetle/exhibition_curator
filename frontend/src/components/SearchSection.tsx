@@ -5,9 +5,10 @@ import { type SearchFilters } from '../types/artwork'
 import ResultsSection from './ResultsSection'
 import { type Artwork } from '../types/artwork'
 
-const SearchSection = () => {
+ function SearchSection(props: { addToExhibition: (artwork: Artwork) => void, removeFromExhibition: (artwork: Artwork) => void }) {
+  const { addToExhibition, removeFromExhibition } = props
+
   const [results, setResults] = useState<Artwork[]>([])
-  console.log('SearchSection results', results)
   const [filters, setFilters] = useState<SearchFilters>({
     query: '',
     museum: 'harvard',
@@ -16,9 +17,13 @@ const SearchSection = () => {
     hasImage: true
   })
 
+
 const onFilterChange = (selectedFilters: SearchFilters) => {
   setFilters(selectedFilters)
 }
+
+console.log('SearchSection addToExhibition', addToExhibition)
+console.log('SearchSection removeFromExhibition', removeFromExhibition)
 
   return (
     <div>
@@ -34,7 +39,11 @@ const onFilterChange = (selectedFilters: SearchFilters) => {
         onFilterChange={onFilterChange} 
         />
 
-        <ResultsSection results={results} />
+        <ResultsSection 
+        results={results} 
+        addToExhibition={addToExhibition} 
+        removeFromExhibition={removeFromExhibition} 
+        />
     </div>
   )
 }
