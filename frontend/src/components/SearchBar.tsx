@@ -1,27 +1,24 @@
-import React, { useState } from 'react'
-import { searchArtworks } from '../services/museumApi'
-import { type Artwork, type SearchFilters } from '../types/artwork'
+import { useState } from 'react'
+import { type SearchFilters } from '../types/artwork'
 
 
-function SearchBar ({filters, setFilters, setResults}: {filters: SearchFilters, setFilters: (filters: SearchFilters) => void, setResults: (results: Artwork[]) => void}) {
+function SearchBar ({
+    filters, 
+    onSearch,
+    loading
+}: {
+    filters: SearchFilters, 
+    onSearch: (filters: SearchFilters) => void,
+    loading: boolean
+}) {
     const [query, setQuery] = useState('')
-    const [loading, setLoading] = useState(false)
     const [error, setError] = useState<string | null>(null)
     const [message, setMessage] = useState<string | null>(null)
   
-
-    const handleSearch = async (filters: SearchFilters) => {
-        setLoading(true)
+    const handleSearchClick = () => {
         setError(null)
         setMessage(null)
-        try {
-            const artworks = await searchArtworks(filters)
-            setResults(artworks)
-            } catch (error) {
-                setError(String(error))
-            } finally {
-                setLoading(false)
-            }
+        onSearch({...filters, query})
     }
     
     if (loading) return <div>Loading...</div>
@@ -38,7 +35,7 @@ function SearchBar ({filters, setFilters, setResults}: {filters: SearchFilters, 
                 <button 
                 type="submit" 
                 disabled={loading} 
-                onClick={() => handleSearch({...filters, query})}>Search</button>
+                onClick={handleSearchClick}>Search</button>
                 
         </div>
     )

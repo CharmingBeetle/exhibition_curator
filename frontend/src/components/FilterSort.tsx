@@ -40,6 +40,7 @@ function FilterSort({filters, setFilters, onFilterChange}: {filters: SearchFilte
       <p>Sort by:</p>
       <select
         id="sort-button"
+        value={filters.sortBy}
         onChange={(e) => handleSort(e.target.value)}>
         <option value="relevance">Relevance</option>
         <option value="artist">Artist</option>
@@ -49,6 +50,7 @@ function FilterSort({filters, setFilters, onFilterChange}: {filters: SearchFilte
       <p>Sort order:</p>
       <select
         id="sort-order-button"
+        value={filters.sortOrder}
         onChange={(e) => handleSortOrder(e.target.value)}>
         <option value="asc">Ascending</option>
         <option value="desc">Descending</option>
