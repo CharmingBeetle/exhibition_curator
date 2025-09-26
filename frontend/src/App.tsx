@@ -29,6 +29,7 @@ function App() {
       <SearchSection 
       addToExhibition={addToExhibition} 
       removeFromExhibition={removeFromExhibition}
+      exhibition={exhibition}
       />
    
       <ExhibitionSection 
