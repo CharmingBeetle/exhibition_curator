@@ -32,6 +32,8 @@ function SearchBar ({
                 value={query}
                 placeholder="Search for artworks"
                 onChange={(e) => setQuery(e.target.value)} />
+                <br />
+                <br />
                 <button 
                 type="submit" 
                 disabled={loading} 

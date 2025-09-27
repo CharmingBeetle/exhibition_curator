@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { type SearchFilters } from '../types/artwork'
 
 
-function FilterSort({filters, setFilters, onFilterChange}: {filters: SearchFilters, setFilters: (filters: SearchFilters) => void, onFilterChange: (filters: SearchFilters) => void}) {
+function FilterSort({filters, setFilters}: {filters: SearchFilters, setFilters: (filters: SearchFilters) => void}) {
 
 
   const handleFilter = (selectedMuseum: string) => {

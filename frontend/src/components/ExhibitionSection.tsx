@@ -6,16 +6,37 @@ type ExhibitionSectionProps = {
     removeFromExhibition: (artwork: Artwork) => void
     exhibition: Artwork[]
     setExhibition: (artwork: Artwork[]) => void
+    exhibitionName: string
+    setExhibitionName: (name: string) => void
+    exhibitionDescription: string
+    setExhibitionDescription: (description: string) => void
+    exhibitionNotes: string
+    setExhibitionNotes: (notes: string) => void
+    onClearExhibition: () => void
 }
-function ExhibitionSection({ exhibition, setExhibition, removeFromExhibition }: ExhibitionSectionProps) {
+function ExhibitionSection({ 
+  exhibition, 
+  setExhibition, 
+  removeFromExhibition, 
+  exhibitionName, 
+  setExhibitionName, 
+  exhibitionDescription, 
+  setExhibitionDescription, 
+  exhibitionNotes, 
+  setExhibitionNotes,
+  onClearExhibition,
+}: ExhibitionSectionProps) {
 
-  if( ! exhibition || exhibition.length === 0 ) {
+  if( !exhibition || exhibition.length === 0 ) {
     return null
   }
     
   return (
-    <div> 
-      <h1>User Exhibition</h1>
+    <section> 
+      <h2>{exhibitionName}</h2>
+      <p>Description: {exhibitionDescription}</p>
+      <p>Notes: {exhibitionNotes}</p>
+
         {exhibition.map((artwork) => (
           
             <div key={artwork.id}>
@@ -28,10 +49,10 @@ function ExhibitionSection({ exhibition, setExhibition, removeFromExhibition }: 
                 <button onClick={() => removeFromExhibition(artwork)}>Remove</button>
             </div>
         ))}
-        <button onClick={() => setExhibition([])}>Clear Exhibition</button>
+        <button 
+        onClick={onClearExhibition}>Clear Exhibition</button>
         <p>Total artworks: {exhibition.length}</p>
-        
-    </div>
+    </section>
   )
 }
 
