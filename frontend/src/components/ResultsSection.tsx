@@ -9,18 +9,19 @@ type ResultsSectionProps = {
     loading: boolean
     loadMore: () => void
     exhibition: Artwork[]
+    message: string | null
 }
 
-function ResultsSection({ results, addToExhibition, removeFromExhibition, hasMorePages, loading, loadMore, exhibition }: ResultsSectionProps) {
-    // Helper function to check if artwork is already in exhibition
-    const isArtworkInExhibition = (artworkId: string | number) => {
-        return exhibition.some(artwork => artwork.id.toString() === artworkId.toString());
+function ResultsSection({ results, addToExhibition, removeFromExhibition, hasMorePages, loading, loadMore, exhibition, message }: ResultsSectionProps) {
+    
+    const isInExhibition = (artworkId: number) => {
+        return exhibition.some(artwork => artwork.id.toString() === artworkId.toString())
     };
 
     return (
         <div>
-            <h1>Results</h1>
-            {results.length === 0 && <div>No results found</div>}
+            <h2>Results</h2>
+            {message}
 
             {results.map((result) => (
                 <div
@@ -37,26 +38,26 @@ function ResultsSection({ results, addToExhibition, removeFromExhibition, hasMor
                     <p>Title: {result.title}</p>
                     <p>Artist: {result.artist}</p>
                     <p>Museum: {result.museum}</p>
-                    {!isArtworkInExhibition(result.id) ? (
+                    {!isInExhibition(result.id) ? (
                         <button onClick={() => addToExhibition(result)}>
-                            Add to Exhibition
+                            Add
                         </button>
                     ) : (
-                        <p>
-                            ✓ Added!
-                        </p>
+                        <p> ✓ Added! </p>
                     )}
-                    <button onClick={() => removeFromExhibition(result)}>Remove from Exhibition</button>
+                    <button onClick={() => removeFromExhibition(result)}>Remove</button>
 
                 </div>
             ))
             }
+        {results.length > 0 && (
             <button
                 onClick={loadMore}
                 disabled={loading || !hasMorePages}
             >
                 {loading ? "Loading..." : hasMorePages ? "Load More" : "No More Results"}
             </button>
+        )}
         </div>
     )
 }

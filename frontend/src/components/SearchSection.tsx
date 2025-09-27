@@ -66,18 +66,22 @@ const handleSearch = async (searchFilters: SearchFilters) => {
   
 
 return (
+  <section>
+  <h2>Search</h2>
   <div>
+    <FilterSort
+      filters={filters}
+      setFilters={setFilters}
+    />
+ <br />
     <SearchBar
       filters={filters}
       onSearch={handleSearch}
       loading={loading}
     />
-
-    <FilterSort
-      filters={filters}
-      setFilters={setFilters}
-    />
-
+    <br />
+    <hr />
+    <br />
     <ResultsSection
       results={results}
       addToExhibition={addToExhibition}
@@ -88,6 +92,7 @@ return (
       exhibition={exhibition}
     />
   </div>
+  </section>
 )
 }
 

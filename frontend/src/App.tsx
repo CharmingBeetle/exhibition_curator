@@ -4,9 +4,15 @@ import Header from './components/Header'
 import SearchSection from './components/SearchSection'
 import ExhibitionSection from './components/ExhibitionSection'
 import type { Artwork } from './types/artwork'
+import ExhibitionNameForm from './components/ExhibitionNameForm'
 
 function App() {
   const [exhibition, setExhibition] = useState<Artwork[]>([])
+  const [exhibitionName, setExhibitionName] = useState<string>('')
+  const [exhibitionDescription, setExhibitionDescription] = useState<string>('')
+  const [exhibitionNotes, setExhibitionNotes] = useState<string>('')
+  const [hasCreatedExhibition, setHasCreatedExhibition] = useState(false)
+
 
   const addToExhibition = (artwork: Artwork) => {
     setExhibition([...exhibition, artwork])
@@ -16,6 +22,13 @@ function App() {
     setExhibition(exhibition.filter((item) => item.id !== artwork.id))
   }
 
+  const clearExhibition = () => {
+    setExhibition([])
+    setExhibitionName('')
+    setExhibitionDescription('')
+    setExhibitionNotes('')
+    setHasCreatedExhibition(false)
+  }
   return (
     
     <div className="app">
@@ -25,19 +38,41 @@ function App() {
         <h2>Welcome to Assemblé</h2>
         <p>Create your own virtual exhibition from museum collections</p>
       </main>
-      
+
+      <ExhibitionNameForm 
+      exhibitionName={exhibitionName}
+      setExhibitionName={setExhibitionName}
+      exhibitionDescription={exhibitionDescription}
+      setExhibitionDescription={setExhibitionDescription}
+      exhibitionNotes={exhibitionNotes}
+      setExhibitionNotes={setExhibitionNotes}
+      onCreate={() => 
+      setHasCreatedExhibition(true)
+      } />
+
+    {hasCreatedExhibition && (
+      <>
       <SearchSection 
       addToExhibition={addToExhibition} 
       removeFromExhibition={removeFromExhibition}
       exhibition={exhibition}
       />
-   
+      
       <ExhibitionSection 
         exhibition={exhibition} 
         setExhibition={setExhibition}
         removeFromExhibition={removeFromExhibition}
+        exhibitionName={exhibitionName}
+        setExhibitionName={setExhibitionName}
+        exhibitionDescription={exhibitionDescription}
+        setExhibitionDescription={setExhibitionDescription}
+        exhibitionNotes={exhibitionNotes}
+        setExhibitionNotes={setExhibitionNotes}
+        onClearExhibition={clearExhibition}
       />
-      </div>
+      </>
+      )}
+    </div>
   )
 }
 
