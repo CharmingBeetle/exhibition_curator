@@ -1,4 +1,3 @@
-import React, { useState } from 'react'
 import type { Artwork } from '../types/artwork'
 
 
@@ -16,14 +15,10 @@ type ExhibitionSectionProps = {
 }
 function ExhibitionSection({ 
   exhibition, 
-  setExhibition, 
   removeFromExhibition, 
   exhibitionName, 
-  setExhibitionName, 
-  exhibitionDescription, 
-  setExhibitionDescription, 
-  exhibitionNotes, 
-  setExhibitionNotes,
+  exhibitionDescription,
+  exhibitionNotes,
   onClearExhibition,
 }: ExhibitionSectionProps) {
 
