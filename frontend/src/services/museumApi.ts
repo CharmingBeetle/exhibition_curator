@@ -63,6 +63,7 @@ const searchMetMuseum = async (filters: SearchFilters, offset: number = 0): Prom
 
         const artworkDetails = await Promise.all(artworkPromises);
 
+        console.log('[Met] query:', filters.query, 'artworkDetails:', artworkDetails.length)
         return artworkDetails.filter(artwork => artwork !== null) as Artwork[];
 
     } catch (error) {
@@ -75,7 +76,7 @@ const getMetObjectDetails = async (id: number): Promise<Artwork | null> => {
     try {
         const response = await axios.get(`${MET_API_URL}/objects/${id}`);
         const data = response.data;
-
+        console.log('[Met] object details:', data);
         return {
             id: data.objectID.toString(),
             title: data.title || 'Untitled',
@@ -112,41 +113,66 @@ const searchHarvardMuseum = async (filters: SearchFilters, offset: number = 0): 
         const page = Math.floor(offset / 10) + 1;
         params.append("page", page.toString());
 
-        if (filters.query) {
-            params.append('q', filters.query);
-        }
+      if (filters.artist.trim()) {
+        params.append('person', filters.artist.trim())
+      }
 
+      if (filters.department.trim()) {
+        params.append('department', filters.department.trim())
+      }
+
+      if (filters.medium.trim()) {
+        params.append('medium', filters.medium.trim())
+      }
+
+      if (filters.classification.trim()) {
+        params.append('classification', filters.classification.trim())
+      }
+
+      if (filters.country.trim()) {
+        params.append('culture', filters.country.trim())
+      }
+
+      if (filters.dateFrom !== null) {
+        params.append('datebegin', String(filters.dateFrom))
+      }
+
+      if (filters.dateTo !== null) {
+        params.append('dateend', String(filters.dateTo))
+      }
+
+      if (filters.query) {
+        params.append('q', filters.query)
+      }
 
         const response = await axios.get(`${HARVARD_API_URL}?${params.toString()}`);
        
+        console.log('[Harvard] response:', response.data.records.length)
+        const records: Artwork[] = response.data.records.map((record: any) => {
+            const imagePermissionLevel = record.imagepermissionlevel ?? 0
+            const imageData = record.images?.[0]
+            console.log('[Harvard] record:', record)
+            let imageUrl: string | undefined
 
-
-        const allResults = response.data.records.map((record: any) => {
-
-            const imagePermissionLevel = record.imagepermissionlevel || 0;
-            
-            let imageUrl;
-            // Get the first available image
-            const imageData = record.images?.[0];
             if (imageData?.iiifbaseuri) {
-                // Use appropriate size based on permission level
-                if (imagePermissionLevel === 1) {
-                    // Limited to 256px for restricted images
-                    imageUrl = `${imageData.iiifbaseuri}/full/256,/0/default.jpg`;
-                } else {
-                    // Full size for unrestricted images
-                    imageUrl = `${imageData.iiifbaseuri}/full/full/0/default.jpg`;
-                }
-            } else if (record.primaryimageurl) {
-                // Fallback to primaryimageurl if available
-                imageUrl = record.primaryimageurl;
+                imageUrl = imagePermissionLevel === 1
+                    ? `${imageData.iiifbaseuri}/full/256,/0/default.jpg`
+                    : `${imageData.iiifbaseuri}/full/full/0/default.jpg`
+            }
+
+            if (!imageUrl && typeof record.primaryimageurl === 'string') {
+                imageUrl = record.primaryimageurl
+            }
+
+            if (!imageUrl && typeof record.baseimageurl === 'string') {
+                imageUrl = `${record.baseimageurl}?height=512&width=512`
             }
 
             return {
                 id: record.id.toString(),
                 title: record.title || 'Untitled',
-                artist: record.people?.[0]?.name || "Unknown",
-                image: imageUrl,  
+                artist: record.people?.[0]?.name || 'Unknown',
+                image: imageUrl,
                 department: record.department,
                 date: record.dated,
                 period: record.period,
@@ -156,11 +182,10 @@ const searchHarvardMuseum = async (filters: SearchFilters, offset: number = 0): 
                 dimensions: record.dimensions,
                 museum: 'harvard' as const,
                 museumUrl: record.url
-            };
-        });
-
-
-        return allResults;
+            }
+        })
+        console.log('[Harvard] query:', filters.query, 'records:', records.length)
+        return records
     } catch (error) {
         console.error("Error searching Harvard Museum:", error);
         return [];

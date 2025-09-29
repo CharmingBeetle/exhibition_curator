@@ -13,6 +13,8 @@ export type Artwork = {
   dimensions?: string
   thumbnailURL?: string
   description?: string
+  accessionYear?: number | null
+  classification?: string
   museum: "met" | "harvard"
   museumUrl?: string
   isHighlight?: boolean
@@ -21,6 +23,13 @@ export type Artwork = {
 export type SearchFilters = {
   query: string
   museum: 'all' | 'met' | 'harvard'
+  artist: string
+  department: string
+  medium: string
+  classification: string
+  country: string
+  dateFrom: number | null
+  dateTo: number | null
   sortBy: 'relevance' | 'artist' | 'title'
   sortOrder: 'asc' | 'desc'
   hasImage: boolean

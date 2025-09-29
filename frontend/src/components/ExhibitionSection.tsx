@@ -43,7 +43,13 @@ function ExhibitionSection({
                 <img src={artwork.image} 
                 alt={artwork.title} 
                 width="200"
-                height="200"/>
+                height="200"
+                onError={(event) => {
+                  event.currentTarget.src = 'https://picsum.photos/id/321/200/200/?blur=5'
+                }}
+                />
+                
+                
                 <p>{artwork.title}</p>
                 <p>{artwork.artist}</p>
                 <button onClick={() => removeFromExhibition(artwork)}>Remove</button>
