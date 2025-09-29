@@ -13,7 +13,6 @@ export type Artwork = {
   dimensions?: string
   thumbnailURL?: string
   description?: string
-  accessionYear?: number | null
   classification?: string
   museum: "met" | "harvard"
   museumUrl?: string

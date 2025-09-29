@@ -30,23 +30,21 @@ export const searchArtworks = async (filters: SearchFilters, offset: number = 0)
         return [];
     }
 }
-// search artworks from met
+
 const searchMetMuseum = async (filters: SearchFilters, offset: number = 0): Promise<Artwork[]> => {
     try {
 
-        const params = new URLSearchParams(); // build query params for met api
+        const params = new URLSearchParams(); 
 
-        //user search query
+   
         if (filters.query) {
             params.append('q', filters.query);
         }
 
-        // filter for artworks with images
         if (filters.hasImage) {
             params.append('hasImages', 'true');
         }
 
-        // met api call
         const searchResponse = await axios.get(
             `${MET_API_URL}/search?${params.toString()}&offset=${offset}`
         );
@@ -55,10 +53,10 @@ const searchMetMuseum = async (filters: SearchFilters, offset: number = 0): Prom
             return [];
         }
 
-        // get first 10 art objects
+    
         const objectIds = searchResponse.data.objectIDs.slice(0, 10);
 
-        // array of promises
+        
         const artworkPromises = objectIds.map((id: number) => getMetObjectDetails(id));
 
         const artworkDetails = await Promise.all(artworkPromises);
@@ -71,7 +69,7 @@ const searchMetMuseum = async (filters: SearchFilters, offset: number = 0): Prom
         return [];
     }
 }
-// get artwork details from met by id
+
 const getMetObjectDetails = async (id: number): Promise<Artwork | null> => {
     try {
         const response = await axios.get(`${MET_API_URL}/objects/${id}`);
@@ -99,7 +97,7 @@ const getMetObjectDetails = async (id: number): Promise<Artwork | null> => {
         return null;
     }
 }
-// search artworks from harvard
+
 const searchHarvardMuseum = async (filters: SearchFilters, offset: number = 0): Promise<Artwork[]> => {
     try {
         if (!filters.query || filters.query.trim() === '') {
@@ -174,6 +172,7 @@ const searchHarvardMuseum = async (filters: SearchFilters, offset: number = 0): 
                 artist: record.people?.[0]?.name || 'Unknown',
                 image: imageUrl,
                 department: record.department,
+                
                 date: record.dated,
                 period: record.period,
                 culture: record.culture,

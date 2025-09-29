@@ -94,15 +94,7 @@ function SearchSection({ addToExhibition, removeFromExhibition, exhibition }: Se
     setResetKey((value) => value + 1) //reset key to force re-render
   }
 
-  // Add this useEffect to trigger search when filters change
-  useEffect(() => {
-    // Only auto-search if we have a query and have already searched before
-    if (hasSearched && filters.query.trim()) {
-      handleSearch(filters)
-    }
-  }, [filters.museum, filters.hasImage]) // Add other filters that should trigger re-search
 
-  // Or alternatively, trigger search on any filter change:
   useEffect(() => {
     if (hasSearched && filters.query.trim()) {
       handleSearch(filters)
