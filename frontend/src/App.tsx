@@ -5,6 +5,8 @@ import SearchSection from './components/SearchSection'
 import ExhibitionSection from './components/ExhibitionSection'
 import type { Artwork } from './types/artwork'
 import ExhibitionNameForm from './components/ExhibitionNameForm'
+import { SignedOut, SignedIn } from '@clerk/clerk-react'
+import { useAppUser } from './components/UserProvider'
 
 function App() {
   const [exhibition, setExhibition] = useState<Artwork[]>([])
@@ -13,7 +15,8 @@ function App() {
   const [exhibitionNotes, setExhibitionNotes] = useState<string>('')
   const [hasCreatedExhibition, setHasCreatedExhibition] = useState(false)
 
-
+  const { user } = useAppUser()
+  
   const addToExhibition = (artwork: Artwork) => {
     setExhibition([...exhibition, artwork])
   }
@@ -32,13 +35,20 @@ function App() {
   return (
     
     <div className="app">
-      
+     
       <Header />
       <main>
+        <SignedOut>
+          <h2>Welcome to Assemblé</h2>
+          <p>Create your own virtual exhibition from museum collections</p>
+        </SignedOut>
+        <SignedIn>
+          <h2>Welcome back, {user?.firstName}</h2>
+        </SignedIn>
         <h2>Welcome to Assemblé</h2>
         <p>Create your own virtual exhibition from museum collections</p>
       </main>
-
+     
       <ExhibitionNameForm 
       exhibitionName={exhibitionName}
       setExhibitionName={setExhibitionName}
