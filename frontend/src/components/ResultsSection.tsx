@@ -1,6 +1,7 @@
 import { type Artwork } from '../types/artwork'
 
 
+
 type ResultsSectionProps = {
   results: Artwork[]
   addToExhibition: (artwork: Artwork) => void
@@ -11,6 +12,7 @@ type ResultsSectionProps = {
   exhibition: Artwork[]
   isEmptyResults: boolean
   query: string
+  onArtworkClick: (artwork: Artwork) => void
 }
 
 const ResultsSection = ({
@@ -22,7 +24,8 @@ const ResultsSection = ({
   loadMore,
   exhibition,
   isEmptyResults,
-  query
+  query,
+  onArtworkClick
 }: ResultsSectionProps) => {
   const isInExhibition = (artworkId: number) =>
     exhibition.some((artwork) => artwork.id.toString() === artworkId.toString())
@@ -54,6 +57,7 @@ const ResultsSection = ({
       <h2>Results</h2>
       {results.map((result) => (
         <div key={result.id}>
+
           <img
             src={result.image || 'https://picsum.photos/id/321/200/200/?blur=5'}
             alt={result.title}
@@ -65,13 +69,18 @@ const ResultsSection = ({
           />
           <p>Title: {result.title}</p>
           <p>Artist: {result.artist}</p>
-          <p>Museum: {result.museum}</p>
+          <p>Museum: {result.museum.charAt(0).toUpperCase() + result.museum.slice(1)}</p>
+          <button onClick={() => onArtworkClick(result)}>View Details</button>
+          <br />
+          <br />
           {!isInExhibition(result.id) ? (
             <button onClick={() => addToExhibition(result)}>Add</button>
           ) : (
             <p>✓ Added!</p>
           )}
           <button onClick={() => removeFromExhibition(result)}>Remove</button>
+          <br />
+          <hr />
         </div>
       ))}
 

@@ -6,7 +6,7 @@ import ResultsSection from './ResultsSection'
 import { type Artwork } from '../types/artwork'
 import { searchArtworks } from '../services/museumApi'
 import { applyFilters } from '../utils/applyFilters'
-
+import ArtworkDetailModal from './ArtworkDetailModal'
 
 type SearchSectionProps = {
   addToExhibition: (artwork: Artwork) => void
@@ -38,6 +38,7 @@ function SearchSection({ addToExhibition, removeFromExhibition, exhibition }: Se
   const [hasSearched, setHasSearched] = useState(false)
   const [lastQuery, setLastQuery] = useState('')
   const [resetKey, setResetKey] = useState(0)
+  const [selectedArtwork, setSelectedArtwork] = useState<Artwork | null>(null)
 
   const filteredResults = useMemo(() => applyFilters(rawResults, filters), [rawResults, filters]) 
   const isEmptyResults = hasSearched && !loading && filteredResults.length === 0
@@ -94,7 +95,6 @@ function SearchSection({ addToExhibition, removeFromExhibition, exhibition }: Se
     setResetKey((value) => value + 1) //reset key to force re-render
   }
 
-
   useEffect(() => {
     if (hasSearched && filters.query.trim()) {
       handleSearch(filters)
@@ -148,7 +148,13 @@ function SearchSection({ addToExhibition, removeFromExhibition, exhibition }: Se
       exhibition={exhibition}
       isEmptyResults={isEmptyResults}
       query={lastQuery}
+      onArtworkClick={setSelectedArtwork}
     />
+
+    {selectedArtwork && 
+    <ArtworkDetailModal 
+    artwork={selectedArtwork} 
+    onClose={() => setSelectedArtwork(null)} />}
   </section>
 )
 }
