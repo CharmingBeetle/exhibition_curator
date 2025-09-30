@@ -3,7 +3,7 @@ import axios from "axios"
 
 const MET_API_URL = "https://collectionapi.metmuseum.org/public/collection/v1";
 const HARVARD_API_URL = "https://api.harvardartmuseums.org/object";
-const HARVARD_API_KEY = import.meta.env.VITE_HARVARD_API_KEY;
+const HARVARD_API_KEY = import.meta.env?.VITE_HARVARD_API_KEY;
 
 export const searchArtworks = async (filters: SearchFilters, offset: number = 0): Promise<Artwork[]> => {
     try {
