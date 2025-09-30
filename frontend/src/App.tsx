@@ -39,14 +39,11 @@ function App() {
       <Header />
       <main>
         <SignedOut>
-          <h2>Welcome to Assemblé</h2>
-          <p>Create your own virtual exhibition from museum collections</p>
+          <h2>Create your own virtual exhibition from museum collections</h2>
         </SignedOut>
         <SignedIn>
           <h2>Welcome back, {user?.firstName}</h2>
         </SignedIn>
-        <h2>Welcome to Assemblé</h2>
-        <p>Create your own virtual exhibition from museum collections</p>
       </main>
      
       <ExhibitionNameForm 

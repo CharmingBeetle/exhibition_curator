@@ -91,7 +91,12 @@ const getMetObjectDetails = async (id: number): Promise<Artwork | null> => {
             museum: 'met' as const,
             museumUrl: data.objectURL,
             isHighlight: data.isHighlight,
-        };
+            tags: Array.isArray(data.tags) 
+            ? data.tags.map((tag:any) => ({
+                term: tag.term
+            }))
+            : undefined,
+            }
     } catch (error) {
         console.error("Error getting Met object details:", error);
         return null;

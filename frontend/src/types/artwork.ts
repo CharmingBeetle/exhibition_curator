@@ -17,6 +17,7 @@ export type Artwork = {
   museum: "met" | "harvard"
   museumUrl?: string
   isHighlight?: boolean
+  tags?: ArtworkTag[]
 }
 
 export type SearchFilters = {
@@ -32,4 +33,8 @@ export type SearchFilters = {
   sortBy: 'relevance' | 'artist' | 'title'
   sortOrder: 'asc' | 'desc'
   hasImage: boolean
+}
+
+export type ArtworkTag = {
+  term: string
 }

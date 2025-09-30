@@ -35,7 +35,9 @@ const matchesQuery = (artwork: Artwork, query: string): boolean => {
   ] //array of fields to check if artwork matches query
     .map((value) => value?.toLowerCase() ?? '') 
 
-  return fields.some((value) => value.includes(normalizedQuery))
+  const tagTerms = artwork.tags?.map((tag) => tag.term?.toLowerCase() ?? '') ?? []
+
+  return [...fields, ...tagTerms].some((value) => value.includes(normalizedQuery))
 }
 
 //apply filters to artworks => returns filtered artworks
@@ -45,9 +47,9 @@ export const applyFilters = (artworks: Artwork[], filters: SearchFilters): Artwo
     if (filters.museum !== 'all' && artwork.museum !== filters.museum) {
       return false
     }
-    //if hasImage is true, return true if artwork has image
-    if (filters.hasImage) {
-      return Boolean(artwork.image && artwork.image.trim().length > 0)
+    //if hasImage is true, return false if artwork has image
+    if (filters.hasImage && (!artwork.image || artwork.image.trim().length === 0)) {
+      return false
     }
     //if artist is not empty, return false if artwork artist is not the same as the filter artist
     if (filters.artist.trim()) {
@@ -122,15 +124,10 @@ export const applyFilters = (artworks: Artwork[], filters: SearchFilters): Artwo
   }
   //if query is not empty, return filtered artworks
   const primaryMatches = baseList.filter((artwork) => matchesQuery(artwork, filters.query)) //filter artworks that match query
-  const matchedIds = new Set(primaryMatches.map((artwork) => artwork.id.toString()))
-  const secondaryMatches = baseList.filter((artwork) => !matchedIds.has(artwork.id.toString())) //filter artworks that do not match query
 
   if (primaryMatches.length === 0) {
-    return sortArtworks(baseList, filters)
-  } //if primary matches is empty, return sorted artworks
+    return []
+  }
 
-  return [
-    ...sortArtworks(primaryMatches, filters),
-    ...sortArtworks(secondaryMatches, filters)
-  ] 
+  return sortArtworks(primaryMatches, filters)
 }
