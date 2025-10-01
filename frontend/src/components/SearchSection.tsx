@@ -7,6 +7,7 @@ import { type Artwork } from '../types/artwork'
 import { searchArtworks } from '../services/museumApi'
 import { applyFilters } from '../utils/applyFilters'
 import ArtworkDetailModal from './ArtworkDetailModal'
+import Toast from './Toast'
 
 type SearchSectionProps = {
   addToExhibition: (artwork: Artwork) => void
@@ -39,11 +40,21 @@ function SearchSection({ addToExhibition, removeFromExhibition, exhibition }: Se
   const [lastQuery, setLastQuery] = useState('')
   const [resetKey, setResetKey] = useState(0)
   const [selectedArtwork, setSelectedArtwork] = useState<Artwork | null>(null)
+  const [toast, setToast] = useState({ visible: false, message: '', type: 'error' as const})
 
-  const filteredResults = useMemo(() => applyFilters(rawResults, filters), [rawResults, filters]) 
+  const filteredResults = useMemo(() => applyFilters(rawResults, filters), [rawResults, filters])
   const isEmptyResults = hasSearched && !loading && filteredResults.length === 0
 
+  const showErrorToast = (message: string) => {
+    setToast({ 
+      visible: true, 
+      message, 
+      type: 'error'
+    })
+  }
+
   const handleSearch = async (searchFilters: SearchFilters) => {
+
     setLoading(true)
     setOffset(0)
     setHasMorePages(true)
@@ -54,8 +65,12 @@ function SearchSection({ addToExhibition, removeFromExhibition, exhibition }: Se
     try {
       const results = await searchArtworks(searchFilters)
       setRawResults(results)
+      setHasMorePages(results.length > 0)
+      setToast((prev) => ({ ...prev, visible: false }))
     } catch (error) {
       setRawResults([])
+      setHasMorePages(false)
+      showErrorToast('Unable to load artwork results. Please try again.')
     } finally {
       setLoading(false)
     }
@@ -67,7 +82,6 @@ function SearchSection({ addToExhibition, removeFromExhibition, exhibition }: Se
     try {
       const newOffset = offset + 10
       const newResults = await searchArtworks(filters, newOffset)
-
       if (newResults.length === 0) {
         setHasMorePages(false)
         return
@@ -79,7 +93,8 @@ function SearchSection({ addToExhibition, removeFromExhibition, exhibition }: Se
       setRawResults((prev) => [...prev, ...uniqueNewResults])
       setOffset(newOffset)
     } catch (error) {
-      console.error('Error loading more results:', error)
+      setHasMorePages(false)
+      showErrorToast('Unable to load more artwork results. Please try again.')
     } finally {
       setLoading(false)
     }
@@ -97,61 +112,72 @@ function SearchSection({ addToExhibition, removeFromExhibition, exhibition }: Se
   }, [filters.artist, filters.department, filters.medium, filters.classification, filters.country, filters.dateFrom, filters.dateTo])
 
   return (
-  <section id="search">
-  <h2>Search</h2>
-  <div className="search-controls">
-    <SearchBar
-      filters={filters}
-      onQueryChange={(value) => setFilters((prev) => ({ ...prev, query: value }))}
-      onSubmit={() => handleSearch(filters)}
-      loading={loading}
-      resetKey={resetKey}
-    />
 
-    <FilterSort
-      filters={filters}
-      onChange={setFilters}
-    />
+    <section id="search">
 
-    <div className="search-actions">
-      <button
-        type="button"
-        onClick={() => handleSearch(filters)}
-        disabled={loading}
-      >
-        Search
-      </button>
+      <h2>Search</h2>
+      <Toast 
+      message={toast.message} 
+      type={toast.type} 
+      isVisible={toast.visible} 
+      onClose={() => setToast((prev) => ({ ...prev, visible: false }))} 
+      />
+      <div className="search-controls">
+        <SearchBar
+          filters={filters}
+          onQueryChange={(value) => setFilters((prev) => ({ ...prev, query: value }))}
+          onSubmit={() => handleSearch(filters)}
+          loading={loading}
+          resetKey={resetKey}
+        />
 
-      <button
-        type="button"
-        onClick={resetFilters}
-        disabled={loading && !hasSearched}
-      >
-        Reset Filters
-      </button>
-    </div>
-  </div>
-    <hr />
-    <br />
-    <ResultsSection
-      results={filteredResults}
-      addToExhibition={addToExhibition}
-      removeFromExhibition={removeFromExhibition}
-      hasMorePages={hasMorePages}
-      loadMore={loadMore}
-      loading={loading}
-      exhibition={exhibition}
-      isEmptyResults={isEmptyResults}
-      query={lastQuery}
-      onArtworkClick={setSelectedArtwork}
-    />
+        <FilterSort
+          filters={filters}
+          onChange={setFilters}
+        />
 
-    {selectedArtwork && 
-    <ArtworkDetailModal 
-    artwork={selectedArtwork} 
-    onClose={() => setSelectedArtwork(null)} />}
-  </section>
-)
+        <div className="search-actions">
+          <button
+            type="button"
+            onClick={() => handleSearch(filters)}
+            disabled={loading}
+          >
+            Search
+          </button>
+
+          <button
+            type="button"
+            onClick={resetFilters}
+            disabled={loading && !hasSearched}
+          >
+            Reset Filters
+          </button>
+        </div>
+      </div>
+      <hr />
+      <br />
+      <ResultsSection
+        results={filteredResults}
+        addToExhibition={addToExhibition}
+        removeFromExhibition={removeFromExhibition}
+        hasMorePages={hasMorePages}
+        loadMore={loadMore}
+        loading={loading}
+        exhibition={exhibition}
+        isEmptyResults={isEmptyResults}
+        query={lastQuery}
+        onArtworkClick={setSelectedArtwork}
+      />
+
+      {selectedArtwork &&
+        <ArtworkDetailModal
+          artwork={selectedArtwork}
+          onClose={() => setSelectedArtwork(null)} />}
+
+
+    </section>
+
+  )
 }
 
 export default SearchSection

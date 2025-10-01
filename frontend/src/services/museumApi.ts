@@ -6,33 +6,24 @@ const HARVARD_API_URL = "https://api.harvardartmuseums.org/object";
 const HARVARD_API_KEY = import.meta.env?.VITE_HARVARD_API_KEY;
 
 export const searchArtworks = async (filters: SearchFilters, offset: number = 0): Promise<Artwork[]> => {
-    try {
+  const results: Artwork[] = []
 
-        let results: Artwork[] = []; //store all search results
+  if (filters.museum === 'met' || filters.museum === 'all') {
+    const metResults = await searchMetMuseum(filters, offset)
+    results.push(...metResults)
+  }
 
-        if (filters.museum === "met" || filters.museum === "all") {
+  if (filters.museum === 'harvard' || filters.museum === 'all') {
+    const harvardResults = await searchHarvardMuseum(filters, offset)
+    results.push(...harvardResults)
+  }
 
-            const metResults = await searchMetMuseum(filters, offset);
-
-            results.push(...metResults);
-        }
-
-        if (filters.museum === "harvard" || filters.museum === "all") {
-
-            const harvardResults = await searchHarvardMuseum(filters, offset);
-
-            results.push(...harvardResults);
-        }
-
-        return results;
-    } catch (error) {
-        console.error("Error searching for artworks:", error);
-        return [];
-    }
+  return results
 }
 
+
 const searchMetMuseum = async (filters: SearchFilters, offset: number = 0): Promise<Artwork[]> => {
-    try {
+  try {
 
         const params = new URLSearchParams(); 
 
@@ -65,13 +56,13 @@ const searchMetMuseum = async (filters: SearchFilters, offset: number = 0): Prom
         return artworkDetails.filter(artwork => artwork !== null) as Artwork[];
 
     } catch (error) {
-        console.error("Error searching Met Museum:", error);
-        return [];
+        console.error('Error searching Met Museum:', error)
+        throw error
     }
 }
 
 const getMetObjectDetails = async (id: number): Promise<Artwork | null> => {
-    try {
+  try {
         const response = await axios.get(`${MET_API_URL}/objects/${id}`);
         const data = response.data;
         console.log('[Met] object details:', data);
@@ -99,13 +90,13 @@ const getMetObjectDetails = async (id: number): Promise<Artwork | null> => {
             : undefined,
             }
     } catch (error) {
-        console.error("Error getting Met object details:", error);
-        return null;
+        console.error('Error getting Met object details:', error)
+        throw error
     }
 }
 
 const searchHarvardMuseum = async (filters: SearchFilters, offset: number = 0): Promise<Artwork[]> => {
-    try {
+  try {
         if (!filters.query || filters.query.trim() === '') {
             return [];
         }
@@ -192,8 +183,8 @@ const searchHarvardMuseum = async (filters: SearchFilters, offset: number = 0): 
         console.log('[Harvard] query:', filters.query, 'records:', records.length)
         return records
     } catch (error) {
-        console.error("Error searching Harvard Museum:", error);
-        return [];
+        console.error('Error searching Harvard Museum:', error)
+        throw error
     }
 }
 
