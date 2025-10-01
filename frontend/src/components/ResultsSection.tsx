@@ -27,7 +27,7 @@ const ResultsSection = ({
   query,
   onArtworkClick
 }: ResultsSectionProps) => {
-  const isInExhibition = (artworkId: number) =>
+  const isInExhibition = (artworkId: number | string) =>
     exhibition.some((artwork) => artwork.id.toString() === artworkId.toString())
 
   if (isEmptyResults) {

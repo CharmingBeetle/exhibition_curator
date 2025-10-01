@@ -6,7 +6,7 @@ type FilterSortProps = {
 }
 //filter options arrays
 const departmentOptions = ['','American Decorative Arts','Ancient Art','Asian Art','Drawings and Prints','European Paintings','Modern and Contemporary Art','Photography']
-const mediumOptions = ['','Oil on canvas','Watercolor','Bronze','Ink on paper','Photograph','Marble','Ceramic']
+const mediumOptions = ['','Oil on canvas','Watercolor','Bronze','Ink on paper','Photograph','Marble','Ceramic', "Etching", "Sculpture", "Photography"]
 const classificationOptions = ['','Paintings','Sculpture','Prints','Drawings','Photographs','Textiles','Furniture']
 const countryOptions = ['','France','United States','Italy','Japan','Spain','Netherlands','Germany','China','United Kingdom']
 

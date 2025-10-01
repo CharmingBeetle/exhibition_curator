@@ -87,11 +87,6 @@ function SearchSection({ addToExhibition, removeFromExhibition, exhibition }: Se
 
   const resetFilters = () => {
     setFilters(initialFilters)
-    setRawResults([])
-    setHasMorePages(true)
-    setHasSearched(false)
-    setOffset(0)
-    setLastQuery('')
     setResetKey((value) => value + 1) //reset key to force re-render
   }
 

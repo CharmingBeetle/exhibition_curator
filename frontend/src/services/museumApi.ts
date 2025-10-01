@@ -82,6 +82,7 @@ const getMetObjectDetails = async (id: number): Promise<Artwork | null> => {
             image: data.primaryImage,
             thumbnailURL: data.primaryImageSmall,
             department: data.department,
+            classification: data.classification,
             date: data.objectDate,
             period: data.period,
             culture: data.culture,
@@ -177,7 +178,7 @@ const searchHarvardMuseum = async (filters: SearchFilters, offset: number = 0): 
                 artist: record.people?.[0]?.name || 'Unknown',
                 image: imageUrl,
                 department: record.department,
-                
+                classification: record.classification,
                 date: record.dated,
                 period: record.period,
                 culture: record.culture,
