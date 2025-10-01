@@ -27,7 +27,7 @@ function ExhibitionSection({
   }
     
   return (
-    <section> 
+    <section id="exhibition"> 
       <h2>{exhibitionName}</h2>
       <p>Description: {exhibitionDescription}</p>
       <p>Notes: {exhibitionNotes}</p>
@@ -50,8 +50,9 @@ function ExhibitionSection({
                 <button onClick={() => removeFromExhibition(artwork)}>Remove</button>
             </div>
         ))}
+        <p>Clear or create new exhibition</p>
         <button 
-        onClick={onClearExhibition}>Clear Exhibition</button>
+        onClick={onClearExhibition}>Clear & Create New</button>
         <p>Total artworks: {exhibition.length}</p>
     </section>
   )

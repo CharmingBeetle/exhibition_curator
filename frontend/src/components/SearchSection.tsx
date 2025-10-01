@@ -102,7 +102,7 @@ function SearchSection({ addToExhibition, removeFromExhibition, exhibition }: Se
   }, [filters.artist, filters.department, filters.medium, filters.classification, filters.country, filters.dateFrom, filters.dateTo])
 
   return (
-  <section>
+  <section id="search">
   <h2>Search</h2>
   <div className="search-controls">
     <SearchBar

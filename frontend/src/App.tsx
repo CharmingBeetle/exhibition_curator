@@ -1,86 +1,140 @@
 import './App.css'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Header from './components/Header'
 import SearchSection from './components/SearchSection'
 import ExhibitionSection from './components/ExhibitionSection'
-import type { Artwork } from './types/artwork'
+import type { Artwork} from './types/artwork'
 import ExhibitionNameForm from './components/ExhibitionNameForm'
 import { SignedOut, SignedIn } from '@clerk/clerk-react'
 import { useAppUser } from './components/UserProvider'
 
+
+const localStorageKey = 'exhibition_curator'
+
 function App() {
-  const [exhibition, setExhibition] = useState<Artwork[]>([])
-  const [exhibitionName, setExhibitionName] = useState<string>('')
-  const [exhibitionDescription, setExhibitionDescription] = useState<string>('')
-  const [exhibitionNotes, setExhibitionNotes] = useState<string>('')
-  const [hasCreatedExhibition, setHasCreatedExhibition] = useState(false)
+    const [exhibition, setExhibition] = useState<Artwork[]>([])
+    const [exhibitionName, setExhibitionName] = useState<string>('')
+    const [exhibitionDescription, setExhibitionDescription] = useState<string>('')
+    const [exhibitionNotes, setExhibitionNotes] = useState<string>('')
+    const [hasCreatedExhibition, setHasCreatedExhibition] = useState(false)
+    const [isHydrated, setIsHydrated] = useState(false)
 
-  const { user } = useAppUser()
-  
-  const addToExhibition = (artwork: Artwork) => {
-    setExhibition([...exhibition, artwork])
-  }
+    const { user } = useAppUser()
 
-  const removeFromExhibition = (artwork: Artwork) => {
-    setExhibition(exhibition.filter((item) => item.id !== artwork.id))
-  }
+    const addToExhibition = (artwork: Artwork) => {
+        setExhibition([...exhibition, artwork])
+    }
 
-  const clearExhibition = () => {
-    setExhibition([])
-    setExhibitionName('')
-    setExhibitionDescription('')
-    setExhibitionNotes('')
-    setHasCreatedExhibition(false)
-  }
-  return (
-    
-    <div className="app">
-     
-      <Header />
-      <main>
-        <SignedOut>
-          <h2>Create your own virtual exhibition from museum collections</h2>
-        </SignedOut>
-        <SignedIn>
-          <h2>Welcome back, {user?.firstName}</h2>
-        </SignedIn>
-      </main>
-     
-      <ExhibitionNameForm 
-      exhibitionName={exhibitionName}
-      setExhibitionName={setExhibitionName}
-      exhibitionDescription={exhibitionDescription}
-      setExhibitionDescription={setExhibitionDescription}
-      exhibitionNotes={exhibitionNotes}
-      setExhibitionNotes={setExhibitionNotes}
-      onCreate={() => 
-      setHasCreatedExhibition(true)
-      } />
+    const removeFromExhibition = (artwork: Artwork) => {
+        setExhibition(exhibition.filter((item) => item.id !== artwork.id))
+    }
 
-    {hasCreatedExhibition && (
-      <>
-      <SearchSection 
-      addToExhibition={addToExhibition} 
-      removeFromExhibition={removeFromExhibition}
-      exhibition={exhibition}
-      />
-      
-      <ExhibitionSection 
-        exhibition={exhibition} 
-        setExhibition={setExhibition}
-        removeFromExhibition={removeFromExhibition}
-        exhibitionName={exhibitionName}
-        setExhibitionName={setExhibitionName}
-        exhibitionDescription={exhibitionDescription}
-        setExhibitionDescription={setExhibitionDescription}
-        exhibitionNotes={exhibitionNotes}
-        setExhibitionNotes={setExhibitionNotes}
-        onClearExhibition={clearExhibition}
-      />
-      </>
-      )}
-    </div>
-  )
+    const clearExhibition = () => {
+        setExhibition([])
+        setExhibitionName('')
+        setExhibitionDescription('')
+        setExhibitionNotes('')
+        setHasCreatedExhibition(false)
+        localStorage.removeItem(localStorageKey)
+    }
+    /**
+     Load exhibition from localStorage
+     */
+    useEffect(() => {
+        try {
+            const storedExhibition = localStorage.getItem(localStorageKey)
+            if (!storedExhibition) {
+                return
+            }
+
+            const parsed = JSON.parse(storedExhibition)
+            if (!parsed || typeof parsed !== 'object') {
+                return
+            }
+
+            if (Array.isArray(parsed.exhibition)) setExhibition(parsed.exhibition)
+            if (typeof parsed.exhibitionName === 'string') setExhibitionName(parsed.exhibitionName)
+            if (typeof parsed.exhibitionDescription === 'string') setExhibitionDescription(parsed.exhibitionDescription)
+            if (typeof parsed.exhibitionNotes === 'string') setExhibitionNotes(parsed.exhibitionNotes)
+            if (typeof parsed.hasCreatedExhibition === 'boolean') setHasCreatedExhibition(parsed.hasCreatedExhibition)
+        } catch (error) {
+            console.error('Error loading exhibition from localStorage:', error)
+        } finally {
+            setIsHydrated(true)
+        }
+    }, [])
+
+    /**
+     Save exhibition to localStorage
+     */
+    useEffect(() => {
+        if (!isHydrated) return
+        try {
+           localStorage.setItem(localStorageKey, JSON.stringify({
+                exhibition,
+                exhibitionName,
+                exhibitionDescription,
+                exhibitionNotes,
+                hasCreatedExhibition
+            }))
+        } catch (error) {
+            console.error('Error saving exhibition to localStorage:', error)
+        }
+    }, [isHydrated, exhibition, exhibitionName, exhibitionDescription, exhibitionNotes, hasCreatedExhibition])
+
+    if (!isHydrated) {
+        return null
+      }
+    return (
+
+        <div className="app">
+
+            <Header />
+            <main>
+                <SignedOut>
+                    <h2>Create your own virtual exhibition from museum collections</h2>
+                </SignedOut>
+                <SignedIn>
+                    <h2>Welcome back, {user?.firstName}</h2>
+                </SignedIn>
+            </main>
+
+            <ExhibitionNameForm
+                exhibitionName={exhibitionName}
+                setExhibitionName={setExhibitionName}
+                exhibitionDescription={exhibitionDescription}
+                setExhibitionDescription={setExhibitionDescription}
+                exhibitionNotes={exhibitionNotes}
+                setExhibitionNotes={setExhibitionNotes}
+                onCreate={() =>
+                    setHasCreatedExhibition(true)
+                } />
+
+            {hasCreatedExhibition && (
+                <>
+                    <SearchSection
+                        addToExhibition={addToExhibition}
+                        removeFromExhibition={removeFromExhibition}
+                        exhibition={exhibition}
+                    />
+
+                    <ExhibitionSection
+                        exhibition={exhibition}
+                        setExhibition={setExhibition}
+                        removeFromExhibition={removeFromExhibition}
+                        exhibitionName={exhibitionName}
+                        setExhibitionName={setExhibitionName}
+                        exhibitionDescription={exhibitionDescription}
+                        setExhibitionDescription={setExhibitionDescription}
+                        exhibitionNotes={exhibitionNotes}
+                        setExhibitionNotes={setExhibitionNotes}
+                        onClearExhibition={clearExhibition}
+                    />
+                </>
+            )}
+        </div>
+    )
 }
 
 export default App
+
