@@ -53,7 +53,7 @@ const ResultsSection = ({
   }
 
   return (
-    <div>
+    <div className="h-px bg-white/10" aria-hidden="true" id="results-section">
       <h2>Results</h2>
       {results.map((result) => (
         <div key={result.id}>
@@ -79,8 +79,7 @@ const ResultsSection = ({
             <p>✓ Added!</p>
           )}
           <button onClick={() => removeFromExhibition(result)}>Remove</button>
-          <br />
-          <hr />
+        
         </div>
       ))}
 

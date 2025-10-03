@@ -29,8 +29,10 @@ const SearchBar = ({ filters, onQueryChange, onSubmit, loading, resetKey }: Sear
   }
 
   return (
-    <div className="search-bar">
+    <div id="search-bar"
+    className="flex justify-center">
       <input
+        className="rounded-lg border border-white/20 bg-white/5 px-3 py-2 text-white outline-none transition focus:border-white/40 focus:ring-2 focus:ring-indigo-500/60"
         id="search-bar"
         type="text"
         value={query}
@@ -39,8 +41,7 @@ const SearchBar = ({ filters, onQueryChange, onSubmit, loading, resetKey }: Sear
         disabled={loading}
         onKeyDown={handleKeyDown}
       />
-      <br />
-      <br />
+      
     </div>
   )
 }
