@@ -2,34 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/* body {
-  background-color: #000522;
-  color: #ffffff;
-  font-family: 'Inter', sans-serif;
-  margin: 0;
-  width: 100%;
-}
-
-#root {
-  width: 100%;
-  min-height: 100vh;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
-} */
-
-/* body {
-  margin: 0;
-  min-height: 100vh;
-  background: #000522;
-  color: #fff;
-  font-family: 'Inter', sans-serif;
-}
-
-#root {
-  width: 100%;
-  min-height: 100vh;
-} */
 
 /* artwork modal */
 .artwork-detail-modal {
@@ -137,4 +109,29 @@
 .toast-info {
   background: #2196f3;
   color: #fff;
+}
+
+.light-rays {
+  position: absolute;
+  inset: -10%;
+  background: radial-gradient(circle at 20% 20%, rgba(99, 102, 241, 0.35), transparent 55%),
+              radial-gradient(circle at 80% 10%, rgba(236, 72, 153, 0.25), transparent 50%),
+              radial-gradient(circle at 50% 80%, rgba(59, 130, 246, 0.4), transparent 60%);
+  filter: blur(90px);
+  opacity: 0.6;
+  transform: skewY(-8deg) scale(1.1);
+}
+
+.light-rays--accent {
+  opacity: 0.4;
+  transform: skewY(6deg) scale(1.05);
+  mix-blend-mode: screen;
+}
+
+.no-scrollbar {
+  scrollbar-width:none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
 }
