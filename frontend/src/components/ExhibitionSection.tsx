@@ -33,7 +33,7 @@ function ExhibitionSection({
   return (
     <section
       id="exhibition"
-      className="sticky top-28 z-30 space-y-4 rounded-3xl border border-white/10 bg-black/70 p-6 backdrop-blur-xl ring-1 ring-white/10"
+      className="sticky top-40 z-30 space-y-4 rounded-3xl border border-white/10 bg-black/70 p-6 backdrop-blur-xl ring-1 ring-white/10"
     >
       <div className="flex flex-col gap-3">
         <div className="flex items-start justify-between gap-4">
@@ -45,20 +45,20 @@ function ExhibitionSection({
               {exhibitionName?.trim() || 'Untitled exhibition'}
             </h2>
             <p className="text-sm text-slate-200/80">
-              {exhibitionDescription?.trim() || 'Add a description to set the tone for your gallery.'}
+              {exhibitionDescription?.trim() || ''}
             </p>
             {exhibitionNotes?.trim() && (
               <p className="text-xs text-slate-300/70">Notes: {exhibitionNotes}</p>
             )}
           </div>
 
-          <div className="flex min-w-fit items-center gap-3">
+          <div className="flex min-w-fit flex-col items-stretch gap-2 sm:flex-row sm:items-center sm:gap-3">
             {hasArtworks && (
               <span className="rounded-full border border-white/10 bg-white/10 px-3 py-1 text-xs text-white/70">
                 {exhibition.length} selected
               </span>
             )}
-            <div className="flex items-center gap-2">
+            <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-2">
               <button
                 type="button"
                 onClick={() => setShowGalleryModal(true)}
@@ -144,7 +144,7 @@ function ExhibitionSection({
             </>
           ) : (
             <div className="flex flex-col items-center justify-center gap-2 py-6 text-sm text-slate-300/80">
-              <p>Your gallery is empty. Add artworks from the search results to build your selection.</p>
+              <p>Your gallery is empty.</p>
             </div>
           )}
         </div>
@@ -153,6 +153,8 @@ function ExhibitionSection({
         <GalleryModal
           artworks={exhibition}
           exhibitionName={exhibitionName}
+          exhibitionDescription={exhibitionDescription}
+          exhibitionNotes={exhibitionNotes}
           onClose={() => setShowGalleryModal(false)}
         />
       )}
