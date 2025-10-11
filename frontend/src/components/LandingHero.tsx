@@ -1,23 +1,36 @@
-import { SignedIn, SignedOut } from "@clerk/clerk-react"
-import { ArrowRightIcon, SparklesIcon } from "@heroicons/react/24/outline"
+import { SignedIn, SignedOut } from "@clerk/clerk-react";
+import { ArrowRightIcon } from "@heroicons/react/24/outline";
+import LightRays from "../components/LightRays";
 
 interface LandingHeroProps {
-  hasCreatedExhibition: boolean
+  hasCreatedExhibition: boolean;
 }
 
 const LandingHero = ({ hasCreatedExhibition }: LandingHeroProps) => {
   return (
     <section className="relative overflow-hidden bg-gradient-to-br from-indigo-600/20 via-transparent to-purple-500/10">
-      <div className="absolute inset-x-0 top-0 -z-10 flex justify-center blur-3xl">
-        <div className="h-64 w-[32rem] bg-indigo-500/40" />
+      {/* Subtle glow effects */}
+      <div className="absolute inset-0 bg-gradient-radial from-indigo-500/5 via-transparent to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-br from-transparent via-indigo-400/3 to-purple-400/5" />
+      
+      <div className="absolute inset-0 pointer-events-none">
+        <LightRays
+          raysOrigin="top-center"
+          raysColor="#00ffff"
+          raysSpeed={1.5}
+          lightSpread={0.8}
+          rayLength={1.2}
+          followMouse={true}
+          mouseInfluence={0.1}
+          noiseAmount={0.1}
+          distortion={0.05}
+          className="custom-rays"
+        />
       </div>
 
       <div className="mx-auto w-full max-w-6xl px-6 pb-12 pt-12 sm:pt-12 lg:pt-12">
         <div className="flex flex-col gap-10 md:flex-row md:items-center md:gap-14">
           <div className="max-w-2xl space-y-6">
-            {/* <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/10 px-4 py-1 text-xs font-semibold uppercase tracking-[0.4em] text-indigo-300">
-              Assemblé curator studio
-            </span> */}
             <h1 className="text-4xl font-semibold text-white sm:text-5xl lg:text-6xl">
               Create your own virtual exhibition from world-leading collections.
             </h1>
@@ -75,7 +88,8 @@ const LandingHero = ({ hasCreatedExhibition }: LandingHeroProps) => {
                   Build a storyline with notes, context, and moodboards.
                 </li>
                 <li className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3">
-                  Share your exhibition with collaborators or the public instantly.
+                  Share your exhibition with collaborators or the public
+                  instantly.
                 </li>
               </ul>
             </div>
@@ -83,7 +97,7 @@ const LandingHero = ({ hasCreatedExhibition }: LandingHeroProps) => {
         </div>
       </div>
     </section>
-  )
-}
+  );
+};
 
 export default LandingHero;

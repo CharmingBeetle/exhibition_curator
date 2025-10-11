@@ -1,7 +1,5 @@
 import { type Artwork } from '../types/artwork'
 
-
-
 type ResultsSectionProps = {
   results: Artwork[]
   addToExhibition: (artwork: Artwork) => void
@@ -25,26 +23,28 @@ const ResultsSection = ({
   exhibition,
   isEmptyResults,
   query,
-  onArtworkClick
+  onArtworkClick,
 }: ResultsSectionProps) => {
   const isInExhibition = (artworkId: number | string) =>
     exhibition.some((artwork) => artwork.id.toString() === artworkId.toString())
 
   if (isEmptyResults) {
     return (
-      <div>
-        <h2>Results</h2>
-        <p>No results found for “{query}”. Try adjusting your filters or search term.</p>
-      </div>
+      <section className="space-y-3">
+        <div className="rounded-2xl border border-dashed border-white/15 bg-white/5 p-6 text-center text-sm text-slate-300/80">
+          No results found for “{query}”. Try a broader term or reset your filters.
+        </div>
+      </section>
     )
   }
 
   if (results.length === 0 && loading) {
     return (
-      <div>
-        <h2>Results</h2>
-        <p>Loading…</p>
-      </div>
+      <section className="space-y-3">
+        <div className="rounded-2xl border border-white/10 bg-white/5 p-6 text-center text-sm text-slate-200/80">
+          Loading results…
+        </div>
+      </section>
     )
   }
 
@@ -53,42 +53,107 @@ const ResultsSection = ({
   }
 
   return (
-    <div className="h-px bg-white/10" aria-hidden="true" id="results-section">
-      <h2>Results</h2>
-      {results.map((result) => (
-        <div key={result.id}>
-
-          <img
-            src={result.image || 'https://picsum.photos/id/321/200/200/?blur=5'}
-            alt={result.title}
-            width={200}
-            height={200}
-            onError={(event) => {
-              event.currentTarget.src = 'https://picsum.photos/id/321/200/200/?blur=5'
-            }}
-          />
-          <p>Title: {result.title}</p>
-          <p>Artist: {result.artist}</p>
-          <p>Museum: {result.museum.charAt(0).toUpperCase() + result.museum.slice(1)}</p>
-          <button onClick={() => onArtworkClick(result)}>View Details</button>
-          <br />
-          <br />
-          {!isInExhibition(result.id) ? (
-            <button onClick={() => addToExhibition(result)}>Add</button>
-          ) : (
-            <p>✓ Added!</p>
-          )}
-          <button onClick={() => removeFromExhibition(result)}>Remove</button>
-        
+    <section id="results" className="space-y-6">
+      <div className="flex items-baseline justify-between">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-[0.35em] text-indigo-200/80">
+            Results
+          </p>
+          <h2 className="text-lg font-semibold text-white">Artwork matches</h2>
         </div>
-      ))}
+        {query && (
+          <span className="rounded-full border border-white/10 bg-white/10 px-3 py-1 text-xs text-white/70">
+            “{query}”
+          </span>
+        )}
+      </div>
+
+      <ul className="space-y-4">
+        {results.map((result) => {
+          const inGallery = isInExhibition(result.id)
+          return (
+            <li key={result.id}>
+              <article className="group overflow-hidden rounded-2xl border border-white/10 bg-white/5 shadow-[0_20px_45px_-25px_rgba(99,102,241,0.6)] transition hover:border-indigo-300/50">
+                <div className="flex flex-col gap-4 p-4 sm:flex-row sm:items-center sm:gap-6">
+                  <button
+                    type="button"
+                    onClick={() => onArtworkClick(result)}
+                    aria-label={`View details for ${result.title}`}
+                    className="relative shrink-0 overflow-hidden rounded-xl border border-white/15 bg-black/40 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400 sm:w-36"
+                  >
+                    <img
+                      src={result.image || 'https://picsum.photos/id/321/400/400/?blur=5'}
+                      alt={result.title}
+                      className="h-28 w-full object-cover transition duration-300 group-hover:scale-105"
+                      onError={(event) => {
+                        event.currentTarget.src = 'https://picsum.photos/id/321/400/400/?blur=5'
+                      }}
+                    />
+                    <span className="pointer-events-none absolute inset-0 flex items-center justify-center bg-black/50 text-xs font-semibold uppercase tracking-[0.3em] text-white opacity-0 transition duration-300 group-hover:opacity-100">
+                      View details
+                    </span>
+                  </button>
+
+                  <div className="flex flex-1 flex-col gap-2 text-left">
+                    <div>
+                      <h3 className="text-base font-semibold text-white">{result.title}</h3>
+                      {result.artist && (
+                        <p className="text-sm text-indigo-200/80">{result.artist}</p>
+                      )}
+                    </div>
+                    <div className="flex flex-wrap items-center gap-2 text-xs text-slate-300/70">
+                      <span className="rounded-full border border-white/10 bg-white/5 px-2 py-1 uppercase tracking-[0.25em]">
+                        {result.museum}
+                      </span>
+                      {result.medium && (
+                        <span className="rounded-full border border-white/10 bg-white/5 px-2 py-1 text-[0.65rem]">
+                          {result.medium}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="flex shrink-0 flex-col items-end gap-2">
+                    {!inGallery ? (
+                      <button
+                        onClick={() => addToExhibition(result)}
+                        className="inline-flex items-center justify-center rounded-lg bg-indigo-500 px-4 py-2 text-xs font-semibold uppercase tracking-[0.3em] text-white transition hover:bg-indigo-400"
+                      >
+                        Add
+                      </button>
+                    ) : (
+                      <>
+                        <span className="inline-flex items-center justify-center rounded-lg border border-white/15 bg-white/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.3em] text-white/80">
+                          Added
+                        </span>
+                        <button
+                          onClick={() => removeFromExhibition(result)}
+                          className="inline-flex items-center justify-center rounded-lg border border-white/15 bg-white/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.3em] text-white/80 transition hover:border-white/25 hover:bg-white/15"
+                        >
+                          Remove
+                        </button>
+                      </>
+                    )}
+                  </div>
+                </div>
+              </article>
+            </li>
+          )
+        })}
+      </ul>
 
       {results.length > 0 && (
-        <button onClick={loadMore} disabled={loading || !hasMorePages}>
-          {loading ? 'Loading…' : hasMorePages ? 'Load More' : 'No More Results'}
-        </button>
+        <div className="flex justify-center">
+          <button
+            onClick={loadMore}
+            disabled={loading || !hasMorePages}
+            className="inline-flex items-center justify-center rounded-full border border-white/15 bg-white/10 px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.3em] text-white transition hover:border-white/25 hover:bg-white/15 disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            {loading ? 'Loading…' : hasMorePages ? 'Load more results' : 'No more results'}
+          </button>
+        </div>
       )}
-    </div>
+    </section>
   )
 }
 

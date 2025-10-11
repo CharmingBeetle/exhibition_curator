@@ -5,6 +5,7 @@ import App from './App.tsx'
 import { ClerkProvider } from '@clerk/clerk-react'
 import { UserProvider } from './components/UserProvider.tsx'
 
+
 const clerkPubKey = import.meta.env?.VITE_CLERK_PUBLISHABLE_KEY
 
 if (!clerkPubKey) {

@@ -2,7 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  font-family: 'Poppins', sans-serif;
+@layer base {
+  html, body {
+    font-family: 'Poppins', sans-serif !important;
+  }
+  
+  * {
+    font-family: 'Poppins', sans-serif;
+  }
 }
 
