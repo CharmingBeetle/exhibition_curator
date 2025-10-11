@@ -1,5 +1,6 @@
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import type { Artwork } from '../types/artwork'
+import GalleryModal from './GalleryModal'
 
 type ExhibitionSectionProps = {
   exhibition: Artwork[]
@@ -20,6 +21,7 @@ function ExhibitionSection({
 }: ExhibitionSectionProps) {
   const hasArtworks = exhibition.length > 0
   const scrollContainerRef = useRef<HTMLDivElement>(null)
+  const [showGalleryModal, setShowGalleryModal] = useState(false)
 
   const handleScroll = (direction: number) => {
     const container = scrollContainerRef.current
@@ -56,13 +58,23 @@ function ExhibitionSection({
                 {exhibition.length} selected
               </span>
             )}
-            <button
-              type="button"
-              onClick={onClearExhibition}
-              className="inline-flex items-center justify-center rounded-lg border border-white/15 bg-white/10 px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.3em] text-white/80 transition hover:border-white/20 hover:bg-white/15"
-            >
-              Clear
-            </button>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => setShowGalleryModal(true)}
+                className="inline-flex items-center justify-center rounded-lg border border-white/15 bg-white/10 px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.3em] text-white/80 transition hover:border-white/20 hover:bg-white/15"
+                disabled={!hasArtworks}
+              >
+                View gallery
+              </button>
+              <button
+                type="button"
+                onClick={onClearExhibition}
+                className="inline-flex items-center justify-center rounded-lg border border-white/15 bg-white/10 px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.3em] text-white/80 transition hover:border-white/20 hover:bg-white/15"
+              >
+                Clear
+              </button>
+            </div>
           </div>
         </div>
 
@@ -137,6 +149,13 @@ function ExhibitionSection({
           )}
         </div>
       </div>
+      {showGalleryModal && (
+        <GalleryModal
+          artworks={exhibition}
+          exhibitionName={exhibitionName}
+          onClose={() => setShowGalleryModal(false)}
+        />
+      )}
     </section>
   )
 }
