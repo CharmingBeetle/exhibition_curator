@@ -4,6 +4,11 @@ import { type SearchFilters, type Artwork } from '../types/artwork'
 const sortArtworks = (artworks: Artwork[], filters: SearchFilters): Artwork[] => {
   const sorted = [...artworks]
 
+  if (filters.sortBy === 'relevance') {
+    sorted.sort((a, b) => (b.score ?? 0) - (a.score ?? 0))
+    return filters.sortOrder === 'asc' ? sorted : sorted.reverse()
+  }
+
   if (filters.sortBy === 'artist') {
     sorted.sort((a, b) => (a.artist ?? '').localeCompare(b.artist ?? '', 'en', { sensitivity: 'base' }))
   } else if (filters.sortBy === 'title') {

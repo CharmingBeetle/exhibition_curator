@@ -18,6 +18,7 @@ export type Artwork = {
   museumUrl?: string
   isHighlight?: boolean
   tags?: ArtworkTag[]
+  score?: number
 }
 
 export type SearchFilters = {
