@@ -143,6 +143,7 @@ function App() {
           {hasCreatedExhibition && (
             <div className="space-y-8">
               <SearchSection
+                pageSize={20}
                 addToExhibition={addToExhibition}
                 removeFromExhibition={removeFromExhibition}
                 exhibition={exhibition}
