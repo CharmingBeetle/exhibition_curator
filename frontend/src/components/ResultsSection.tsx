@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import { type Artwork } from '../types/artwork'
 
 type ResultsSectionProps = {
@@ -11,6 +12,7 @@ type ResultsSectionProps = {
   isEmptyResults: boolean
   query: string
   onArtworkClick: (artwork: Artwork) => void
+  onReset: () => void
 }
 
 const ResultsSection = ({
@@ -24,7 +26,24 @@ const ResultsSection = ({
   isEmptyResults,
   query,
   onArtworkClick,
+  onReset,
 }: ResultsSectionProps) => {
+  const [showFloatingReset, setShowFloatingReset] = useState(false)
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+
+    const handleScroll = () => {
+      setShowFloatingReset(window.scrollY > 320)
+    }
+
+    handleScroll()
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+    }
+  }, [])
+
   const isInExhibition = (artworkId: number | string) =>
     exhibition.some((artwork) => artwork.id.toString() === artworkId.toString())
 
@@ -151,7 +170,19 @@ const ResultsSection = ({
           >
             {loading ? 'Loading…' : hasMorePages ? 'Load more results' : 'No more results'}
           </button>
+          
         </div>
+      )}
+
+      {results.length > 0 && showFloatingReset && (
+        <button
+          type="button"
+          onClick={onReset}
+          className="fixed bottom-6 right-6 inline-flex items-center justify-center rounded-full bg-indigo-500 px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.3em] text-white shadow-lg transition hover:bg-indigo-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-300"
+          aria-label="Reset search and scroll to top"
+        >
+          Reset search
+        </button>
       )}
     </section>
   )

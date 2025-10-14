@@ -13,6 +13,7 @@ type SearchSectionProps = {
   addToExhibition: (artwork: Artwork) => void;
   removeFromExhibition: (artwork: Artwork) => void;
   exhibition: Artwork[];
+  pageSize: number;
 };
 
 const initialFilters: SearchFilters = {
@@ -34,6 +35,7 @@ function SearchSection({
   addToExhibition,
   removeFromExhibition,
   exhibition,
+  pageSize,
 }: SearchSectionProps) {
   const [rawResults, setRawResults] = useState<Artwork[]>([]);
   const [filters, setFilters] = useState<SearchFilters>(initialFilters);
@@ -95,7 +97,7 @@ function SearchSection({
     setLoading(true);
 
     try {
-      const newOffset = offset + 10;
+      const newOffset = offset + pageSize;
       const newResults = await searchArtworks(filters, newOffset);
       if (newResults.length === 0) {
         setHasMorePages(false);
@@ -121,6 +123,21 @@ function SearchSection({
     setFilters(initialFilters);
     setResetKey((value) => value + 1);
     setShowFilters(true);
+  };
+
+  const resetSearch = () => {
+    resetFilters();
+    setRawResults([]);
+    setHasSearched(false);
+    setHasMorePages(true);
+    setOffset(0);
+    setLastQuery("");
+    setSelectedArtwork(null);
+    setToast((prev) => ({ ...prev, visible: false }));
+
+    if (typeof window !== "undefined") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
   };
 
   useEffect(() => {
@@ -213,6 +230,7 @@ function SearchSection({
         isEmptyResults={isEmptyResults}
         query={lastQuery}
         onArtworkClick={setSelectedArtwork}
+        onReset={resetSearch}
       />
 
       {selectedArtwork && (
