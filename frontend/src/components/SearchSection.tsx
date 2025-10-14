@@ -14,6 +14,7 @@ type SearchSectionProps = {
   removeFromExhibition: (artwork: Artwork) => void;
   exhibition: Artwork[];
   pageSize: number;
+  onEnterSearch?: () => void;
 };
 
 const initialFilters: SearchFilters = {
@@ -36,6 +37,7 @@ function SearchSection({
   removeFromExhibition,
   exhibition,
   pageSize,
+  onEnterSearch,
 }: SearchSectionProps) {
   const [rawResults, setRawResults] = useState<Artwork[]>([]);
   const [filters, setFilters] = useState<SearchFilters>(initialFilters);
@@ -71,6 +73,7 @@ function SearchSection({
   };
 
   const handleSearch = async (searchFilters: SearchFilters) => {
+    onEnterSearch?.();
     setLoading(true);
     setOffset(0);
     setHasMorePages(true);

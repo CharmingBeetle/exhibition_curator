@@ -20,6 +20,7 @@ function App() {
   const [hasCreatedExhibition, setHasCreatedExhibition] = useState(false);
   const [isHydrated, setIsHydrated] = useState(false);
   const [isCreateCollapsed, setIsCreateCollapsed] = useState(false);
+  const [showHero, setShowHero] = useState(true);
 
   const { user } = useAppUser();
 
@@ -41,6 +42,7 @@ function App() {
     setExhibitionNotes("");
     setHasCreatedExhibition(false);
     setIsCreateCollapsed(false);
+    setShowHero(true);
     localStorage.removeItem(localStorageKey);
   };
 
@@ -109,8 +111,21 @@ function App() {
 
   return (
     <div className="app min-h-screen bg-gradient-to-b from-[#030711] via-[#050a1f] to-[#090f2e] text-white">
-      <Header />
-      <LandingHero hasCreatedExhibition={hasCreatedExhibition} />
+      <Header
+        onNavigate={(href) => {
+          if (href === "#home") {
+            setShowHero(true);
+          } else if (href === "#search") {
+            setShowHero(false);
+          }
+        }}
+      />
+      {showHero && (
+        <LandingHero
+          hasCreatedExhibition={hasCreatedExhibition}
+          onStartSearch={() => setShowHero(false)}
+        />
+      )}
       <main className="relative z-10 mx-auto max-w-6xl px-6 pb-20 pt-12 space-y-12">
         <ExhibitionNameForm
           exhibitionName={exhibitionName}
@@ -136,7 +151,10 @@ function App() {
               exhibitionDescription={exhibitionDescription}
               exhibitionNotes={exhibitionNotes}
               removeFromExhibition={removeFromExhibition}
-              onClearExhibition={clearExhibition}
+              onClearExhibition={() => {
+                clearExhibition();
+                setShowHero(true);
+              }}
             />
           )}
 
@@ -147,6 +165,7 @@ function App() {
                 addToExhibition={addToExhibition}
                 removeFromExhibition={removeFromExhibition}
                 exhibition={exhibition}
+                onEnterSearch={() => setShowHero(false)}
               />
             </div>
           )}

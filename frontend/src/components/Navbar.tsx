@@ -50,9 +50,10 @@ const navItems: NavItem[] = [
 type NavbarProps = {
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
+  onNavigate?: (href: string) => void;
 };
 
-function Navbar({ isOpen, setIsOpen }: NavbarProps) {
+function Navbar({ isOpen, setIsOpen, onNavigate }: NavbarProps) {
   const { signOut } = useClerk();
 
   return (
@@ -69,7 +70,10 @@ function Navbar({ isOpen, setIsOpen }: NavbarProps) {
             <a
               key={href}
               href={href}
-              onClick={() => setIsOpen(false)}
+              onClick={(event) => {
+                setIsOpen(false);
+                onNavigate?.(href);
+              }}
               className="group flex items-center justify-between rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-4 text-left transition duration-200 hover:-translate-y-0.5 hover:border-indigo-400/80 hover:bg-indigo-500/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400"
             >
               <span className="flex items-center gap-4">

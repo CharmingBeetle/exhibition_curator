@@ -4,9 +4,10 @@ import LightRays from "../components/LightRays";
 
 interface LandingHeroProps {
   hasCreatedExhibition: boolean;
+  onStartSearch?: () => void;
 }
 
-const LandingHero = ({ hasCreatedExhibition }: LandingHeroProps) => {
+const LandingHero = ({ hasCreatedExhibition, onStartSearch }: LandingHeroProps) => {
   return (
     <section className="relative overflow-hidden bg-gradient-to-br from-indigo-600/20 via-transparent to-purple-500/10">
       {/* Subtle glow effects */}
@@ -52,6 +53,11 @@ const LandingHero = ({ hasCreatedExhibition }: LandingHeroProps) => {
               <SignedIn>
                 <a
                   href={hasCreatedExhibition ? "#exhibition" : "#search"}
+                  onClick={() => {
+                    if (!hasCreatedExhibition) {
+                      onStartSearch?.();
+                    }
+                  }}
                   className="inline-flex items-center justify-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-semibold text-slate-900 shadow-[0_20px_40px_-20px_rgba(99,102,241,0.5)] transition hover:bg-slate-100"
                 >
                   {hasCreatedExhibition
