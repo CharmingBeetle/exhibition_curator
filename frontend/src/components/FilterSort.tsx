@@ -8,7 +8,29 @@ type FilterSortProps = {
 const departmentOptions = ['','American Decorative Arts','Ancient Art','Asian Art','Drawings and Prints','European Paintings','Modern and Contemporary Art','Photography']
 const mediumOptions = ['','Oil on canvas','Watercolor','Bronze','Ink on paper','Photograph','Marble','Ceramic', "Etching", "Sculpture", "Photography"]
 const classificationOptions = ['','Paintings','Sculpture','Prints','Drawings','Photographs','Textiles','Furniture']
-const countryOptions = ['','France','United States','Italy','Japan','Spain','Netherlands','Germany','China','United Kingdom']
+const countryOptions = [
+  '',
+  'American',
+  'German',
+  'French',
+  'Italian',
+  'British',
+  'Greek',
+  'Roman',
+  'Japanese',
+  'Chinese',
+  'Persian',
+  'Indian',
+  'Dutch',
+  'Spanish',
+  'Korean',
+  'Egyptian',
+  'Russian',
+  'Austrian',
+  'Swiss',
+  'Belgian',
+  'Canadian'
+]
 
 function FilterSort({ filters, onChange }: FilterSortProps) {
   const handleChange = (partial: Partial<SearchFilters>) => {

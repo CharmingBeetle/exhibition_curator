@@ -59,6 +59,40 @@ function SearchSection({
     () => applyFilters(rawResults, filters),
     [rawResults, filters]
   );
+
+  const appliedFilterTags = useMemo(() => {
+    const tags: string[] = []
+
+    if (filters.museum !== "all") {
+      tags.push(filters.museum === "met" ? "Museum: Met" : "Museum: Harvard")
+    }
+    if (filters.artist.trim()) {
+      tags.push(`Artist: ${filters.artist.trim()}`)
+    }
+    if (filters.department.trim()) {
+      tags.push(`Department: ${filters.department.trim()}`)
+    }
+    if (filters.medium.trim()) {
+      tags.push(`Medium: ${filters.medium.trim()}`)
+    }
+    if (filters.classification.trim()) {
+      tags.push(`Classification: ${filters.classification.trim()}`)
+    }
+    if (filters.country.trim()) {
+      tags.push(`Culture: ${filters.country.trim()}`)
+    }
+    if (filters.dateFrom !== null || filters.dateTo !== null) {
+      const from = filters.dateFrom ?? "Any"
+      const to = filters.dateTo ?? "Present"
+      tags.push(`Date: ${from} – ${to}`)
+    }
+    if (!filters.hasImage) {
+      tags.push("Has Image: No")
+    }
+
+    return tags
+  }, [filters])
+
   const isEmptyResults =
     hasSearched && !loading && filteredResults.length === 0;
 
@@ -234,6 +268,7 @@ function SearchSection({
         query={lastQuery}
         onArtworkClick={setSelectedArtwork}
         onReset={resetSearch}
+        activeFilters={appliedFilterTags}
       />
 
       {selectedArtwork && (
