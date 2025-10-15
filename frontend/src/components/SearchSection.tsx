@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import SearchBar from "./SearchBar";
 import FilterSort from "./FilterSort";
 import { type SearchFilters } from "../types/artwork";
@@ -51,9 +51,10 @@ function SearchSection({
   const [toast, setToast] = useState({
     visible: false,
     message: "",
-    type: "error" as const,
+    type: "info" as const,
   });
   const [showFilters, setShowFilters] = useState(true);
+  const toastTimeoutRef = useRef<number | null>(null);
 
   const filteredResults = useMemo(
     () => applyFilters(rawResults, filters),
@@ -98,12 +99,37 @@ function SearchSection({
 
   const isFiltersCollapsed = hasSearched && !showFilters;
 
-  const showErrorToast = (message: string) => {
+  const showToast = (
+    message: string,
+    type: "error" | "success" | "info" = "info",
+    autoDismissMs = 4000
+  ) => {
     setToast({
       visible: true,
       message,
-      type: "error",
+      type: type as "info", 
     });
+
+    if (toastTimeoutRef.current) {
+      window.clearTimeout(toastTimeoutRef.current);
+    }
+
+    toastTimeoutRef.current = window.setTimeout(() => {
+      hideToast();
+      toastTimeoutRef.current = null;
+    }, autoDismissMs);
+  };
+
+  const showErrorToast = (message: string) => {
+    showToast(message, "error");
+  };
+
+  const hideToast = () => {
+    if (toastTimeoutRef.current) {
+      window.clearTimeout(toastTimeoutRef.current);
+      toastTimeoutRef.current = null;
+    }
+    setToast((prev) => ({ ...prev, visible: false }));
   };
 
   const handleSearch = async (searchFilters: SearchFilters) => {
@@ -119,8 +145,23 @@ function SearchSection({
       const results = await searchArtworks(searchFilters);
       setRawResults(results);
       setHasMorePages(results.length > 0);
-      setToast((prev) => ({ ...prev, visible: false }));
       setShowFilters(false);
+
+      const filteredCount = applyFilters(results, searchFilters).length;
+
+      if (filteredCount > 0) {
+        showToast(
+          `Found ${filteredCount} artwork${filteredCount === 1 ? "" : "s"} matching your filters.`,
+          "success"
+        );
+      } else {
+        showToast(
+          searchFilters.query.trim()
+            ? `No artworks found for "${searchFilters.query}" with the current filters. Try adjusting them.`
+            : "No artworks matched your current filters.",
+          "info"
+        );
+      }
     } catch (error) {
       setRawResults([]);
       setHasMorePages(false);
@@ -138,6 +179,7 @@ function SearchSection({
       const newResults = await searchArtworks(filters, newOffset);
       if (newResults.length === 0) {
         setHasMorePages(false);
+        showToast("No more artworks to load.", "info");
         return;
       }
 
@@ -146,7 +188,20 @@ function SearchSection({
         (result) => !existingIds.has(result.id)
       );
 
-      setRawResults((prev) => [...prev, ...uniqueNewResults]);
+      if (uniqueNewResults.length === 0) {
+        showToast("All loaded artworks are already in your results.", "info");
+      } else {
+        const updatedResults = [...rawResults, ...uniqueNewResults];
+        setRawResults(updatedResults);
+
+        const filteredCount = applyFilters(updatedResults, filters).length;
+        showToast(
+          `Loaded ${uniqueNewResults.length} more artwork${
+            uniqueNewResults.length === 1 ? "" : "s"
+          }. ${filteredCount} currently visible after filters.`,
+          "success"
+        );
+      }
       setOffset(newOffset);
     } catch (error) {
       setHasMorePages(false);
@@ -170,12 +225,20 @@ function SearchSection({
     setOffset(0);
     setLastQuery("");
     setSelectedArtwork(null);
-    setToast((prev) => ({ ...prev, visible: false }));
+    hideToast();
 
     if (typeof window !== "undefined") {
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
   };
+
+  useEffect(() => {
+    return () => {
+      if (toastTimeoutRef.current) {
+        window.clearTimeout(toastTimeoutRef.current);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     if (hasSearched && filters.query.trim()) {
@@ -197,7 +260,7 @@ function SearchSection({
         message={toast.message}
         type={toast.type}
         isVisible={toast.visible}
-        onClose={() => setToast((prev) => ({ ...prev, visible: false }))}
+        onClose={hideToast}
       />
 
       <div className={`rounded-2xl bg-white/5 backdrop-blur-sm ring-1 ring-white/10 transition-all ${showFilters ? 'space-y-6 p-6' : 'space-y-4 px-5 py-4'}`}>
@@ -277,6 +340,7 @@ function SearchSection({
           onClose={() => setSelectedArtwork(null)}
         />
       )}
+     
     </section>
   );
 }

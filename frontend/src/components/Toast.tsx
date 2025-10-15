@@ -1,4 +1,5 @@
 import React from 'react'
+import { createPortal } from 'react-dom'
 
 type ToastProps = {
     message: string
@@ -20,13 +21,19 @@ function Toast({ message, type, isVisible, onClose }: ToastProps) {
         return null
     }
 
-  return (
-    <div className={getToastClass(type)}>
-        <span>{getToastIcon(type)}</span>
+  const toastMarkup = (
+    <div className={getToastClass(type)} role="status" aria-live="polite">
+        <span aria-hidden="true">{getToastIcon(type)}</span>
         <p>{message}</p>
-        <button onClick={onClose}>Close</button>
+        <button onClick={onClose} type="button" aria-label="Close notification">Close</button>
     </div>
   )
+
+  if (typeof window === 'undefined' || typeof document === 'undefined') {
+    return toastMarkup
+  }
+
+  return createPortal(toastMarkup, document.body)
 }
 
 export default Toast
