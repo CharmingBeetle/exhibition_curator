@@ -1,15 +1,15 @@
-import { useRef, useState } from 'react'
-import type { Artwork } from '../types/artwork'
-import GalleryModal from './GalleryModal'
+import { useRef, useState } from "react";
+import type { Artwork } from "../types/artwork";
+import GalleryModal from "./GalleryModal";
 
 type ExhibitionSectionProps = {
-  exhibition: Artwork[]
-  exhibitionName: string
-  exhibitionDescription: string
-  exhibitionNotes: string
-  removeFromExhibition: (artwork: Artwork) => void
-  onClearExhibition: () => void
-}
+  exhibition: Artwork[];
+  exhibitionName: string;
+  exhibitionDescription: string;
+  exhibitionNotes: string;
+  removeFromExhibition: (artwork: Artwork) => void;
+  onClearExhibition: () => void;
+};
 
 function ExhibitionSection({
   exhibition,
@@ -19,16 +19,16 @@ function ExhibitionSection({
   removeFromExhibition,
   onClearExhibition,
 }: ExhibitionSectionProps) {
-  const hasArtworks = exhibition.length > 0
-  const scrollContainerRef = useRef<HTMLDivElement>(null)
-  const [showGalleryModal, setShowGalleryModal] = useState(false)
+  const hasArtworks = exhibition.length > 0;
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const [showGalleryModal, setShowGalleryModal] = useState(false);
 
   const handleScroll = (direction: number) => {
-    const container = scrollContainerRef.current
-    if (!container) return
-    const scrollAmount = direction * 180
-    container.scrollBy({ left: scrollAmount, behavior: 'smooth' })
-  }
+    const container = scrollContainerRef.current;
+    if (!container) return;
+    const scrollAmount = direction * 180;
+    container.scrollBy({ left: scrollAmount, behavior: "smooth" });
+  };
 
   return (
     <section
@@ -42,13 +42,15 @@ function ExhibitionSection({
               Exhibition gallery
             </p>
             <h2 className="text-xl font-semibold text-white">
-              {exhibitionName?.trim() || 'Untitled exhibition'}
+              {exhibitionName?.trim() || "Untitled exhibition"}
             </h2>
             <p className="text-sm text-slate-200/80">
-              {exhibitionDescription?.trim() || ''}
+              {exhibitionDescription?.trim() || ""}
             </p>
             {exhibitionNotes?.trim() && (
-              <p className="text-xs text-slate-300/70">Notes: {exhibitionNotes}</p>
+              <p className="text-xs text-slate-300/70">
+                Notes: {exhibitionNotes}
+              </p>
             )}
           </div>
 
@@ -110,20 +112,32 @@ function ExhibitionSection({
                 {exhibition.map((artwork) => (
                   <figure
                     key={artwork.id}
-                    className="group relative h-28 w-28 shrink-0 overflow-hidden rounded-xl border border-white/10 bg-black/30 shadow-[0_12px_35px_-25px_rgba(99,102,241,0.65)]"
+                    onClick={() => setShowGalleryModal(true)}
+                    className="group relative h-28 w-28 shrink-0 overflow-hidden rounded-xl border border-white/10 bg-black/30 shadow-[0_12px_35px_-25px_rgba(99,102,241,0.65)] cursor-pointer"
                   >
                     <img
-                      src={artwork.image || 'https://picsum.photos/id/321/200/200/?blur=5'}
+                      src={
+                        artwork.image ||
+                        "https://picsum.photos/id/321/200/200/?blur=5"
+                      }
                       alt={artwork.title}
-                      className="pointer-events-none h-full w-full object-cover transition duration-300 group-hover:scale-105"
+                      className="pointer-events-none h-full w-full object-cover transition-transform duration-300 group-hover:scale-110 group-hover:brightness-110"
                       onError={(event) => {
-                        event.currentTarget.src = 'https://picsum.photos/id/321/200/200/?blur=5'
+                        event.currentTarget.src =
+                          "https://picsum.photos/id/321/200/200/?blur=5";
                       }}
                     />
-                    <div className="pointer-events-none absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-black/85 via-black/40 to-transparent px-3 py-2 opacity-0 transition duration-300 group-hover:opacity-100">
-                      <p className="truncate text-xs font-medium text-white">{artwork.title}</p>
+                    <div className="pointer-events-none absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-black/80 via-black/40 to-transparent px-3 py-2 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                      <span className="mb-1 text-[0.6rem] uppercase tracking-[0.3em] text-indigo-200/70">
+                        View details
+                      </span>
+                      <p className="truncate text-xs font-medium text-white">
+                        {artwork.title}
+                      </p>
                       {artwork.artist && (
-                        <p className="text-[0.65rem] text-indigo-200/80">{artwork.artist}</p>
+                        <p className="text-[0.65rem] text-indigo-200/80">
+                          {artwork.artist}
+                        </p>
                       )}
                       {artwork.museum && (
                         <p className="text-[0.6rem] uppercase tracking-[0.25em] text-white/50">
@@ -159,7 +173,7 @@ function ExhibitionSection({
         />
       )}
     </section>
-  )
+  );
 }
 
-export default ExhibitionSection
+export default ExhibitionSection;
