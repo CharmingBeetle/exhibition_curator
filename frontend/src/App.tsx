@@ -22,7 +22,7 @@ function App() {
   const [isCreateCollapsed, setIsCreateCollapsed] = useState(false);
   const [showHero, setShowHero] = useState(true);
 
-  const { user } = useAppUser();
+  const { user, isSignedIn } = useAppUser();
 
   const addToExhibition = (artwork: Artwork) => {
     setExhibition((prev) => {
@@ -105,10 +105,24 @@ function App() {
     isCreateCollapsed,
   ]);
 
+  useEffect(() => {
+    if (!isSignedIn) {
+      clearExhibition();
+      setShowHero(true);
+    }
+  }, [isSignedIn]);
+
   if (!isHydrated) {
     return null;
   }
 
+  const scrollTo = (id: string) => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
+  
   return (
     <div className="app min-h-screen bg-gradient-to-b from-[#030711] via-[#050a1f] to-[#090f2e] text-white">
       <Header
@@ -123,7 +137,19 @@ function App() {
       {showHero && (
         <LandingHero
           hasCreatedExhibition={hasCreatedExhibition}
-          onStartSearch={() => setShowHero(false)}
+          isSignedIn={isSignedIn}
+          onStartSearch={() => {
+            setShowHero(false);
+            requestAnimationFrame(() => scrollTo("search"));
+          }}
+          onShowExhibition={() => {
+            setShowHero(false);
+            requestAnimationFrame(() => scrollTo("exhibition"));
+          }}
+          onOpenSignIn={() => {
+            setShowHero(false);
+            requestAnimationFrame(() => scrollTo("search"));
+          }}
         />
       )}
       <main className="relative z-10 mx-auto max-w-6xl px-6 pb-20 pt-12 space-y-12">

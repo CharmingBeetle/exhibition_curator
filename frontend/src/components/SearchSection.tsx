@@ -107,7 +107,7 @@ function SearchSection({
     setToast({
       visible: true,
       message,
-      type: type as "info", 
+      type,
     });
 
     if (toastTimeoutRef.current) {

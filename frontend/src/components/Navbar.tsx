@@ -98,7 +98,7 @@ function Navbar({ isOpen, setIsOpen, onNavigate }: NavbarProps) {
             </p>
             <SignedOut>
               <SignInButton mode="modal">
-                <span className="mt-3 inline-flex w-full items-center justify-center rounded-xl bg-white px-3 py-2 text-sm font-semibold text-slate-900 transition hover:bg-slate-100">
+                <span className="mt-3 inline-flex w-full items-center justify-center rounded-xl bg-white px-3 py-2 text-sm font-semibold text-slate-900 transition hover:bg-slate-100 cursor-pointer">
                   Sign in or create account
                 </span>
               </SignInButton>
