@@ -8,6 +8,7 @@ import { SignedOut, SignedIn } from "@clerk/clerk-react";
 import { useAppUser } from "./components/UserProvider";
 import Header from "./components/Header";
 import LandingHero from "./components/LandingHero";
+import Footer from "./components/Footer";
 
 
 const localStorageKey = "exhibition_curator";
@@ -224,6 +225,8 @@ function App() {
           )}
         </section>
       </main>
+      
+      <Footer />
     </div>
   );
 }
