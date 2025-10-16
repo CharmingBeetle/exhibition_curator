@@ -121,9 +121,7 @@ function ExhibitionNameForm({
               >
                 Save exhibition details
               </button>
-              <span className="text-xs text-slate-300/70">
-                These details appear alongside your gallery preview.
-              </span>
+             
             </div>
           </>
         )}
