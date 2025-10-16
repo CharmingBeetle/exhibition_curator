@@ -28,11 +28,19 @@
     <link rel="dns-prefetch" href="https://api.harvardartmuseums.org" />
     <link rel="dns-prefetch" href="https://collectionapi.metmuseum.org" />
     
-    <!-- Font Loading Optimization -->
+
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- Preload Critical Resources -->
+    
     <link rel="preload" href="/src/main.tsx" as="script" />
+    
+    
+    <style>
+     
+      body { margin: 0; font-family: 'Poppins', sans-serif; background: #000522; color: white; }
+      #root { min-height: 100vh; }
+      .loading { display: flex; align-items: center; justify-content: center; min-height: 100vh; }
+    </style>
   </head>
   <body>
     <div id="root"></div>

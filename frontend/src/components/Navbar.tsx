@@ -130,7 +130,7 @@ function Navbar({ isOpen, setIsOpen, onNavigate }: NavbarProps) {
               type="button"
               onClick={() => {
                 setIsOpen(false);
-                signOut({ redirectUrl: "/" });
+                signOut();
               }}
               className="inline-flex items-center justify-center rounded-xl border border-white/10 bg-white/10 px-4 py-3 text-sm font-semibold text-white transition hover:border-white/20 hover:bg-white/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400"
             >

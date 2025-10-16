@@ -7,6 +7,9 @@ export default defineConfig({
   server: {
     port: 3000,
     strictPort: false,
+    hmr: {
+      port: 3000,
+    },
     headers: {
       'Cache-Control': 'public, max-age=31536000'
     }
@@ -26,13 +29,7 @@ export default defineConfig({
     // Enable source maps for debugging
     sourcemap: false,
     // Optimize for production
-    minify: 'terser',
-    terserOptions: {
-      compress: {
-        drop_console: true,
-        drop_debugger: true
-      }
-    },
+    minify: 'esbuild',
     // Increase chunk size warning limit
     chunkSizeWarningLimit: 1000
   },

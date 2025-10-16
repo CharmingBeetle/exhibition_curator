@@ -114,19 +114,19 @@ const ResultsSection = ({
           return (
             <li key={result.id}>
               <article className="group overflow-hidden rounded-2xl border border-white/10 bg-white/5 shadow-[0_20px_45px_-25px_rgba(99,102,241,0.6)] transition hover:border-indigo-300/50">
-                <div className="flex flex-col gap-4 p-4 sm:flex-row sm:items-center sm:gap-6">
+                <div className="flex items-center gap-4 p-4">
                   <button
                     type="button"
                     onClick={() => onArtworkClick(result)}
                     aria-label={`View details for ${result.title}`}
-                    className="relative shrink-0 overflow-hidden rounded-xl border border-white/15 bg-black/40 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400 sm:w-36"
+                    className="relative shrink-0 overflow-hidden rounded-xl border border-white/15 bg-black/40 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400 w-24 h-24"
                   >
                     <OptimizedImage
                       src={result.image || "https://picsum.photos/id/321/400/400/?blur=5"}
                       alt={result.title}
-                      className="h-28 w-full object-cover transition duration-300 group-hover:scale-105"
-                      width={400}
-                      height={400}
+                      className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
+                      width={96}
+                      height={96}
                       loading="lazy"
                     />
                     <span className="pointer-events-none absolute inset-0 flex items-center justify-center bg-black/50 text-xs font-semibold uppercase tracking-[0.3em] text-white opacity-0 transition duration-300 group-hover:opacity-100">
@@ -136,28 +136,28 @@ const ResultsSection = ({
 
                   <div className="flex flex-1 flex-col gap-2 text-left">
                     <div>
-                      <h3 className="text-base font-semibold text-white">
+                      <h3 className="text-base font-semibold text-white line-clamp-1">
                         {result.title}
                       </h3>
                       {result.artist && (
-                        <p className="text-sm text-indigo-200/80">
+                        <p className="text-sm text-indigo-200/80 line-clamp-1">
                           {result.artist}
                         </p>
                       )}
                     </div>
-                    <div className="flex flex-wrap items-center gap-2 text-xs text-slate-300/70">
-                      <span className="rounded-full border border-white/10 bg-white/5 px-2 py-1 uppercase tracking-[0.25em]">
+                    <div className="flex flex-wrap items-center gap-1 text-xs text-slate-300/70">
+                      <span className="rounded-full border border-white/10 bg-white/5 px-2 py-0.5 uppercase tracking-[0.25em]">
                         {result.museum}
                       </span>
                       {result.medium && (
-                        <span className="rounded-full border border-white/10 bg-white/5 px-2 py-1 text-[0.65rem]">
+                        <span className="rounded-full border border-white/10 bg-white/5 px-2 py-0.5 text-[0.65rem]">
                           {result.medium}
                         </span>
                       )}
                     </div>
                   </div>
 
-                  <div className="flex shrink-0 flex-col items-end gap-2">
+                  <div className="flex shrink-0 items-center gap-2">
                     {!inGallery ? (
                       <button
                         onClick={() => addToExhibition(result)}
