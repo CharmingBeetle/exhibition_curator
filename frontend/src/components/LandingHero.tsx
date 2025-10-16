@@ -1,4 +1,3 @@
-import { ArrowRightIcon } from "@heroicons/react/24/outline";
 import LightRays from "../components/LightRays";
 
 interface LandingHeroProps {
@@ -9,13 +8,7 @@ interface LandingHeroProps {
   onOpenSignIn: () => void;
 }
 
-const LandingHero = ({
-  hasCreatedExhibition,
-  isSignedIn,
-  onStartSearch,
-  onShowExhibition,
-  onOpenSignIn,
-}: LandingHeroProps) => {
+const LandingHero = ({}: LandingHeroProps) => {
   return (
     <section className="relative overflow-hidden bg-gradient-to-br from-indigo-600/20 via-transparent to-purple-500/10">
       <div className="absolute inset-0 bg-gradient-radial from-indigo-500/5 via-transparent to-transparent" />

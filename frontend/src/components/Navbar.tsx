@@ -2,7 +2,6 @@ import {
   SignedOut,
   SignedIn,
   SignInButton,
-  UserButton,
   useClerk,
 } from "@clerk/clerk-react";
 import {
@@ -12,6 +11,7 @@ import {
   SparklesIcon,
   UserIcon,
 } from "@heroicons/react/24/outline";
+import { useEffect, useRef } from "react";
 
 type NavItem = {
   label: string;
@@ -55,9 +55,24 @@ type NavbarProps = {
 
 function Navbar({ isOpen, setIsOpen, onNavigate }: NavbarProps) {
   const { signOut } = useClerk();
+  const navRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, setIsOpen]);
 
   return (
     <div
+      ref={navRef}
       id="header-navigation"
       className={`overflow-hidden border-t border-white/5 transition-[max-height,opacity] duration-500 ease-in-out ${
         isOpen ? "max-h-[640px] opacity-100" : "max-h-0 opacity-0"
@@ -70,7 +85,7 @@ function Navbar({ isOpen, setIsOpen, onNavigate }: NavbarProps) {
             <a
               key={href}
               href={href}
-              onClick={(event) => {
+              onClick={() => {
                 setIsOpen(false);
                 onNavigate?.(href);
               }}
@@ -85,7 +100,7 @@ function Navbar({ isOpen, setIsOpen, onNavigate }: NavbarProps) {
                   <span className="text-xs text-slate-300/80">{description}</span>
                 </span>
               </span>
-              <ChevronRightIcon className="h-4 w-4 text-indigo-200 transition group-hover:translate-x-1 group-hover:text-indigo-100" />
+              <ChevronRightIcon className="h-4 w-4 text-indigo-200 transition group-hover:translate-x-1 group-hover:text-indigo-100" aria-hidden="true" />
             </a>
           ))}
         </nav>

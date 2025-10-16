@@ -7,6 +7,37 @@ export default defineConfig({
   server: {
     port: 3000,
     strictPort: false,
-    headers: {}
+    headers: {
+      'Cache-Control': 'public, max-age=31536000'
+    }
   },
+  build: {
+    // Optimize bundle size
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom'],
+          clerk: ['@clerk/clerk-react'],
+          icons: ['@heroicons/react'],
+          utils: ['axios']
+        }
+      }
+    },
+    // Enable source maps for debugging
+    sourcemap: false,
+    // Optimize for production
+    minify: 'terser',
+    terserOptions: {
+      compress: {
+        drop_console: true,
+        drop_debugger: true
+      }
+    },
+    // Increase chunk size warning limit
+    chunkSizeWarningLimit: 1000
+  },
+  // Optimize dependencies
+  optimizeDeps: {
+    include: ['react', 'react-dom', '@clerk/clerk-react', '@heroicons/react/24/outline']
+  }
 })

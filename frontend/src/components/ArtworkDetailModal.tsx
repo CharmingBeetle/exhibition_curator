@@ -1,6 +1,7 @@
 import type { Artwork } from '../types/artwork'
 import { createPortal } from 'react-dom'
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
+import OptimizedImage from './OptimizedImage'
 
 type ArtworkDetailModalProps = {
   artwork: Artwork
@@ -8,13 +9,28 @@ type ArtworkDetailModalProps = {
 }
 
 function ArtworkDetailModal({ artwork, onClose }: ArtworkDetailModalProps) {
+  const modalRef = useRef<HTMLDivElement>(null)
+  const closeButtonRef = useRef<HTMLButtonElement>(null)
+
   useEffect(() => {
     const handleEsc = (event: KeyboardEvent) => {
       if (event.key === 'Escape') onClose()
     }
 
+    // Focus management
+    const previousActiveElement = document.activeElement as HTMLElement
+    closeButtonRef.current?.focus()
+
+    // Prevent body scroll
+    document.body.style.overflow = 'hidden'
+
     window.addEventListener('keydown', handleEsc)
-    return () => window.removeEventListener('keydown', handleEsc)
+    
+    return () => {
+      window.removeEventListener('keydown', handleEsc)
+      document.body.style.overflow = 'unset'
+      previousActiveElement?.focus()
+    }
   }, [onClose])
 
   const fallbackImage = artwork.image || 'https://picsum.photos/id/321/800/1000/?blur=5'
@@ -46,8 +62,9 @@ function ArtworkDetailModal({ artwork, onClose }: ArtworkDetailModalProps) {
         onClick={onClose}
       />
 
-      <article className="relative z-10 w-full max-w-2xl overflow-hidden rounded-[1.75rem] border border-white/10 bg-[#050a1f]/95 shadow-[0_32px_80px_-45px_rgba(99,102,241,0.7)]">
+      <article ref={modalRef} className="relative z-10 w-full max-w-2xl overflow-hidden rounded-[1.75rem] border border-white/10 bg-[#050a1f]/95 shadow-[0_32px_80px_-45px_rgba(99,102,241,0.7)]">
         <button
+          ref={closeButtonRef}
           type="button"
           onClick={onClose}
           className="absolute right-5 top-5 flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-white/10 text-sm font-semibold uppercase tracking-[0.2em] text-white transition hover:bg-white/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400"
@@ -58,13 +75,13 @@ function ArtworkDetailModal({ artwork, onClose }: ArtworkDetailModalProps) {
 
         <figure className="flex flex-col items-center gap-3 bg-black/30 px-5 pt-7 pb-4">
           <div className="w-full overflow-hidden rounded-lg border border-white/10 bg-black/60">
-            <img
+            <OptimizedImage
               src={fallbackImage}
               alt={artwork.title}
               className="mx-auto max-h-[45vh] w-full object-contain"
-              onError={(event) => {
-                event.currentTarget.src = 'https://picsum.photos/id/321/800/1000/?blur=5'
-              }}
+              width={800}
+              height={1000}
+              loading="eager"
             />
           </div>
           <figcaption className="text-center text-[0.65rem] uppercase tracking-[0.32em] text-white/60">

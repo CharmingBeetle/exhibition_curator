@@ -9,6 +9,7 @@ import { useAppUser } from "./components/UserProvider";
 import Header from "./components/Header";
 import LandingHero from "./components/LandingHero";
 
+
 const localStorageKey = "exhibition_curator";
 
 function App() {
@@ -125,6 +126,20 @@ function App() {
   
   return (
     <div className="app min-h-screen bg-gradient-to-b from-[#030711] via-[#050a1f] to-[#090f2e] text-white">
+      {/* Skip navigation links for screen readers */}
+      <a 
+        href="#main-content" 
+        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:bg-white focus:text-black focus:px-4 focus:py-2 focus:rounded focus:outline-none focus:ring-2 focus:ring-indigo-400"
+      >
+        Skip to main content
+      </a>
+      <a 
+        href="#search" 
+        className="sr-only focus:not-sr-only focus:absolute focus:top-16 focus:left-4 focus:z-50 focus:bg-white focus:text-black focus:px-4 focus:py-2 focus:rounded focus:outline-none focus:ring-2 focus:ring-indigo-400"
+      >
+        Skip to search
+      </a>
+      
       <Header
         onNavigate={(href) => {
           if (href === "#home") {
@@ -152,7 +167,7 @@ function App() {
           }}
         />
       )}
-      <main className="relative z-10 mx-auto max-w-6xl px-6 pb-20 pt-12 space-y-12">
+      <main id="main-content" className="relative z-10 mx-auto max-w-6xl px-6 pb-20 pt-12 space-y-12" role="main">
         <ExhibitionNameForm
           exhibitionName={exhibitionName}
           setExhibitionName={setExhibitionName}
@@ -197,12 +212,12 @@ function App() {
           )}
 
           <SignedOut>
-            <div className="rounded-3xl border border-white/10 bg-white/5 px-8 py-6 text-center text-sm text-slate-200/80 shadow-[0_20px_60px_-25px_rgba(99,102,241,0.5)]">
+            <div className="rounded-3xl border border-white/10 bg-white/5 px-8 py-6 text-center text-sm text-slate-200/80 shadow-[0_20px_60px_-25px_rgba(99,102,241,0.5)]" role="region" aria-label="Sign in prompt">
               Sign in to save your selections, collaborate in real-time, and publish immersive showcases.
             </div>
           </SignedOut>
           <SignedIn>
-            <div className="rounded-3xl border border-white/10 bg-white/5 px-8 py-6 shadow-[0_20px_60px_-25px_rgba(99,102,241,0.5)]">
+            <div className="rounded-3xl border border-white/10 bg-white/5 px-8 py-6 shadow-[0_20px_60px_-25px_rgba(99,102,241,0.5)]" role="region" aria-label="Welcome message">
               <h2 className="text-3xl font-semibold text-white">
                 Welcome back, {user?.firstName}
               </h2>

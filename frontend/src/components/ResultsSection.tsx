@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { type Artwork } from "../types/artwork";
+import OptimizedImage from "./OptimizedImage";
 
 type ResultsSectionProps = {
   results: Artwork[];
@@ -53,9 +54,9 @@ const ResultsSection = ({
 
   if (isEmptyResults) {
     return (
-      <section className="space-y-3">
-        <div className="rounded-2xl border border-dashed border-white/15 bg-white/5 p-6 text-center text-sm text-slate-300/80">
-          No results found for “{query}”. Try a broader term or reset your
+      <section className="space-y-3" aria-live="polite">
+        <div className="rounded-2xl border border-dashed border-white/15 bg-white/5 p-6 text-center text-sm text-slate-300/80" role="status">
+          No results found for "{query}". Try a broader term or reset your
           filters.
         </div>
       </section>
@@ -64,8 +65,8 @@ const ResultsSection = ({
 
   if (results.length === 0 && loading) {
     return (
-      <section className="space-y-3">
-        <div className="rounded-2xl border border-white/10 bg-white/5 p-6 text-center text-sm text-slate-200/80">
+      <section className="space-y-3" aria-live="polite">
+        <div className="rounded-2xl border border-white/10 bg-white/5 p-6 text-center text-sm text-slate-200/80" role="status" aria-label="Loading search results">
           Loading results…
         </div>
       </section>
@@ -77,13 +78,16 @@ const ResultsSection = ({
   }
 
   return (
-    <section id="results" className="space-y-6">
+    <section id="results" className="space-y-6" aria-live="polite" aria-label="Search results">
       <div className="flex items-baseline justify-between">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.35em] text-indigo-200/80">
             Results
           </p>
-          <h2 className="text-lg font-semibold text-white">Artwork matches</h2>
+          <h2 className="text-lg font-semibold text-white">
+            Artwork matches
+            <span className="sr-only">: {results.length} result{results.length !== 1 ? 's' : ''} found</span>
+          </h2>
         </div>
 
         {(query || activeFilters.length > 0) && (
@@ -117,17 +121,13 @@ const ResultsSection = ({
                     aria-label={`View details for ${result.title}`}
                     className="relative shrink-0 overflow-hidden rounded-xl border border-white/15 bg-black/40 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400 sm:w-36"
                   >
-                    <img
-                      src={
-                        result.image ||
-                        "https://picsum.photos/id/321/400/400/?blur=5"
-                      }
+                    <OptimizedImage
+                      src={result.image || "https://picsum.photos/id/321/400/400/?blur=5"}
                       alt={result.title}
                       className="h-28 w-full object-cover transition duration-300 group-hover:scale-105"
-                      onError={(event) => {
-                        event.currentTarget.src =
-                          "https://picsum.photos/id/321/400/400/?blur=5";
-                      }}
+                      width={400}
+                      height={400}
+                      loading="lazy"
                     />
                     <span className="pointer-events-none absolute inset-0 flex items-center justify-center bg-black/50 text-xs font-semibold uppercase tracking-[0.3em] text-white opacity-0 transition duration-300 group-hover:opacity-100">
                       View details
@@ -162,17 +162,19 @@ const ResultsSection = ({
                       <button
                         onClick={() => addToExhibition(result)}
                         className="inline-flex items-center justify-center rounded-lg bg-indigo-500 px-4 py-2 text-xs font-semibold uppercase tracking-[0.3em] text-white transition hover:bg-indigo-400"
+                        aria-label={`Add "${result.title}" to exhibition`}
                       >
                         Add
                       </button>
                     ) : (
                       <>
-                        <span className="inline-flex items-center justify-center rounded-lg border border-white/15 bg-white/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.3em] text-white/80">
+                        <span className="inline-flex items-center justify-center rounded-lg border border-white/15 bg-white/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.3em] text-white/80" aria-label="Added to exhibition">
                           Added
                         </span>
                         <button
                           onClick={() => removeFromExhibition(result)}
                           className="inline-flex items-center justify-center rounded-lg border border-white/15 bg-white/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.3em] text-white/80 transition hover:border-white/25 hover:bg-white/15"
+                          aria-label={`Remove "${result.title}" from exhibition`}
                         >
                           Remove
                         </button>
@@ -192,6 +194,7 @@ const ResultsSection = ({
             onClick={loadMore}
             disabled={loading || !hasMorePages}
             className="inline-flex items-center justify-center rounded-full border border-white/15 bg-white/10 px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.3em] text-white transition hover:border-white/25 hover:bg-white/15 disabled:cursor-not-allowed disabled:opacity-50"
+            aria-label={loading ? "Loading more results" : hasMorePages ? "Load more search results" : "No more results available"}
           >
             {loading
               ? "Loading…"

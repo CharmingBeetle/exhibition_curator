@@ -29,19 +29,25 @@ const SearchBar = ({ filters, onQueryChange, onSubmit, loading, resetKey }: Sear
   }
 
   return (
-    <div id="search-bar"
-    className="flex justify-center">
+    <div className="flex justify-center">
+      <label htmlFor="search-input" className="sr-only">
+        Search for artworks
+      </label>
       <input
         className="rounded-lg border border-white/20 bg-white/5 px-3 py-2 text-white outline-none transition focus:border-white/40 focus:ring-2 focus:ring-indigo-500/60"
-        id="search-bar"
+        id="search-input"
         type="text"
         value={query}
         placeholder="Search for artworks"
         onChange={(event) => handleChange(event.target.value)}
         disabled={loading}
         onKeyDown={handleKeyDown}
+        aria-describedby="search-help"
+        autoComplete="off"
       />
-      
+      <div id="search-help" className="sr-only">
+        Press Enter to search or use the search button
+      </div>
     </div>
   )
 }

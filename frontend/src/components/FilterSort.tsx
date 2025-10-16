@@ -38,17 +38,20 @@ function FilterSort({ filters, onChange }: FilterSortProps) {
   }
 
   return (
-    <div id="filter-sort"
-    className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-      <label id="museum-filter"
-      className="flex flex-col gap-1 text-sm text-white/80">
+    <fieldset className="grid gap-4 md:grid-cols-2 lg:grid-cols-3" aria-labelledby="filter-legend">
+      <legend id="filter-legend" className="sr-only">
+        Filter and sort options for artwork search
+      </legend>
+      <label htmlFor="museum-filter" className="flex flex-col gap-1 text-sm text-white/80">
         <span>Museum:</span>
         <select
+          id="museum-filter"
           className="rounded-lg border border-white/20 bg-white/5 px-3 py-2 text-white outline-none transition focus:border-white/40 focus:ring-2 focus:ring-indigo-500/60"
           value={filters.museum}
           onChange={(event) =>
             handleChange({ museum: event.target.value as SearchFilters['museum'] })
           }
+          aria-label="Select museum to search"
         >
           <option value="all">All Museums</option>
           <option value="met">Metropolitan Museum of Art</option>
@@ -56,25 +59,27 @@ function FilterSort({ filters, onChange }: FilterSortProps) {
         </select>
       </label>
 
-      <label id="artist-filter"
-      className="flex flex-col gap-1 text-sm text-white/80">
+      <label htmlFor="artist-filter" className="flex flex-col gap-1 text-sm text-white/80">
         <span>Artist:</span>
         <input
+          id="artist-filter"
           className="rounded-lg border border-white/20 bg-white/5 px-3 py-2 text-white outline-none transition focus:border-white/40 focus:ring-2 focus:ring-indigo-500/60"
           type="text"
           value={filters.artist}
           placeholder="e.g. Picasso"
           onChange={(event) => handleChange({ artist: event.target.value })}
+          aria-label="Enter artist name to filter by"
         />
       </label>
 
-      <label id="department-filter"
-      className="flex flex-col gap-1 text-sm text-white/80">
+      <label htmlFor="department-filter" className="flex flex-col gap-1 text-sm text-white/80">
         <span>Department:</span>
         <select
+          id="department-filter"
           className="rounded-lg border border-white/20 bg-white/5 px-3 py-2 text-white outline-none transition focus:border-white/40 focus:ring-2 focus:ring-indigo-500/60"
           value={filters.department}
           onChange={(event) => handleChange({ department: event.target.value })}
+          aria-label="Select department to filter by"
         >
           {departmentOptions.map((option) => (
             <option key={option} value={option}>
@@ -84,13 +89,14 @@ function FilterSort({ filters, onChange }: FilterSortProps) {
         </select>
       </label>
 
-      <label id="medium-filter"
-      className="flex flex-col gap-1 text-sm text-white/80">
+      <label htmlFor="medium-filter" className="flex flex-col gap-1 text-sm text-white/80">
         <span>Medium:</span>
         <select
+          id="medium-filter"
           className="rounded-lg border border-white/20 bg-white/5 px-3 py-2 text-white outline-none transition focus:border-white/40 focus:ring-2 focus:ring-indigo-500/60"
           value={filters.medium}
           onChange={(event) => handleChange({ medium: event.target.value })}
+          aria-label="Select medium to filter by"
         >
           {mediumOptions.map((option) => (
             <option key={option} value={option}>
@@ -100,13 +106,14 @@ function FilterSort({ filters, onChange }: FilterSortProps) {
         </select>
       </label>
 
-      <label id="classification-filter"
-      className="flex flex-col gap-1 text-sm text-white/80">
+      <label htmlFor="classification-filter" className="flex flex-col gap-1 text-sm text-white/80">
         <span>Classification:</span>
         <select
+          id="classification-filter"
           className="rounded-lg border border-white/20 bg-white/5 px-3 py-2 text-white outline-none transition focus:border-white/40 focus:ring-2 focus:ring-indigo-500/60"
           value={filters.classification}
           onChange={(event) => handleChange({ classification: event.target.value })}
+          aria-label="Select classification to filter by"
         >
           {classificationOptions.map((option) => (
             <option key={option} value={option}>
@@ -116,13 +123,14 @@ function FilterSort({ filters, onChange }: FilterSortProps) {
         </select>
       </label>
 
-      <label id="country-filter"
-      className="flex flex-col gap-1 text-sm text-white/80">
+      <label htmlFor="country-filter" className="flex flex-col gap-1 text-sm text-white/80">
         <span>Country/Culture:</span>
         <select
+          id="country-filter"
           className="rounded-lg border border-white/20 bg-white/5 px-3 py-2 text-white outline-none transition focus:border-white/40 focus:ring-2 focus:ring-indigo-500/60"
           value={filters.country}
           onChange={(event) => handleChange({ country: event.target.value })}
+          aria-label="Select country or culture to filter by"
         >
           {countryOptions.map((option) => (
             <option key={option} value={option}>
@@ -132,10 +140,10 @@ function FilterSort({ filters, onChange }: FilterSortProps) {
         </select>
       </label>
 
-      <label id="date-from-filter"
-      className="flex flex-col gap-1 text-sm text-white/80">
+      <label htmlFor="date-from-filter" className="flex flex-col gap-1 text-sm text-white/80">
         <span>Start year:</span>
         <select
+          id="date-from-filter"
           className="rounded-lg border border-white/20 bg-white/5 px-3 py-2 text-white outline-none transition focus:border-white/40 focus:ring-2 focus:ring-indigo-500/60"
           value={filters.dateFrom ?? ''}
           onChange={(event) =>
@@ -143,6 +151,7 @@ function FilterSort({ filters, onChange }: FilterSortProps) {
               dateFrom: event.target.value ? Number(event.target.value) : null
             })
           }
+          aria-label="Select start year for date range"
         >
           <option value="">Any</option>
           <option value="1500">1500s</option>
@@ -154,10 +163,10 @@ function FilterSort({ filters, onChange }: FilterSortProps) {
         </select>
       </label>
 
-      <label id="date-to-filter"
-      className="flex flex-col gap-1 text-sm text-white/80">
+      <label htmlFor="date-to-filter" className="flex flex-col gap-1 text-sm text-white/80">
         <span>End year:</span>
         <select
+          id="date-to-filter"
           className="rounded-lg border border-white/20 bg-white/5 px-3 py-2 text-white outline-none transition focus:border-white/40 focus:ring-2 focus:ring-indigo-500/60"
           value={filters.dateTo ?? ''}
           onChange={(event) =>
@@ -165,6 +174,7 @@ function FilterSort({ filters, onChange }: FilterSortProps) {
               dateTo: event.target.value ? Number(event.target.value) : null
             })
           }
+          aria-label="Select end year for date range"
         >
           <option value="">Any</option>
           <option value="1600">1600s</option>
@@ -176,15 +186,16 @@ function FilterSort({ filters, onChange }: FilterSortProps) {
         </select>
       </label>
     
-      <label id="sort-by-filter"
-      className="flex flex-col gap-1 text-sm text-white/80">
+      <label htmlFor="sort-by-filter" className="flex flex-col gap-1 text-sm text-white/80">
         <span>Sort by:</span>
         <select
-        className="rounded-lg border border-white/20 bg-white/5 px-3 py-2 text-white outline-none transition focus:border-white/40 focus:ring-2 focus:ring-indigo-500/60"
+          id="sort-by-filter"
+          className="rounded-lg border border-white/20 bg-white/5 px-3 py-2 text-white outline-none transition focus:border-white/40 focus:ring-2 focus:ring-indigo-500/60"
           value={filters.sortBy}
           onChange={(event) =>
             handleChange({ sortBy: event.target.value as SearchFilters['sortBy'] })
           }
+          aria-label="Select field to sort results by"
         >
           <option value="relevance">Relevance</option>
           <option value="artist">Artist</option>
@@ -192,34 +203,36 @@ function FilterSort({ filters, onChange }: FilterSortProps) {
         </select>
       </label>
 
-      <label id="sort-order-filter"
-      className="flex flex-col gap-1 text-sm text-white/80">
+      <label htmlFor="sort-order-filter" className="flex flex-col gap-1 text-sm text-white/80">
         <span>Sort order:</span>
         <select
+          id="sort-order-filter"
           className="rounded-lg border border-white/20 bg-white/5 px-3 py-2 text-white outline-none transition focus:border-white/40 focus:ring-2 focus:ring-indigo-500/60"
           value={filters.sortOrder}
           onChange={(event) =>
             handleChange({ sortOrder: event.target.value as SearchFilters['sortOrder'] })
           }
+          aria-label="Select sort order (ascending or descending)"
         >
           <option value="asc">Ascending</option>
           <option value="desc">Descending</option>
         </select>
       </label>
 
-      <label id="has-image-filter"
-      className="flex flex-col gap-1 text-sm text-white/80">
+      <label htmlFor="has-image-filter" className="flex flex-col gap-1 text-sm text-white/80">
         <span>Has image:</span>
         <select
+          id="has-image-filter"
           className="rounded-lg border border-white/20 bg-white/5 px-3 py-2 text-white outline-none transition focus:border-white/40 focus:ring-2 focus:ring-indigo-500/60"
           value={filters.hasImage ? 'true' : 'false'}
           onChange={(event) => handleChange({ hasImage: event.target.value === 'true' })}
+          aria-label="Filter by whether artwork has an image"
         >
           <option value="true">Yes</option>
           <option value="false">No</option>
         </select>
       </label>
-    </div>
+    </fieldset>
   )
 }
 

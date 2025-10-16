@@ -34,13 +34,14 @@ const Header = ({ onNavigate }: HeaderProps) => {
           onClick={() => setIsOpen((prev) => !prev)}
           aria-expanded={isOpen}
           aria-controls="header-navigation"
+          aria-label={isOpen ? "Close navigation menu" : "Open navigation menu"}
           className={`inline-flex items-center justify-center rounded-full border border-white/10 p-2.5 text-white transition focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400 ${
             isOpen
               ? "bg-indigo-500/30 hover:bg-indigo-500/20"
               : "bg-white/10 hover:border-indigo-400/60 hover:bg-indigo-500/20"
           }`}
         >
-          <Bars3Icon className="h-6 w-6" />
+          <Bars3Icon className="h-6 w-6" aria-hidden="true" />
         </button>
       </div>
 

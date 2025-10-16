@@ -48,10 +48,14 @@ function SearchSection({
   const [lastQuery, setLastQuery] = useState("");
   const [resetKey, setResetKey] = useState(0);
   const [selectedArtwork, setSelectedArtwork] = useState<Artwork | null>(null);
-  const [toast, setToast] = useState({
+  const [toast, setToast] = useState<{
+    visible: boolean;
+    message: string;
+    type: "error" | "success" | "info";
+  }>({
     visible: false,
     message: "",
-    type: "info" as const,
+    type: "info",
   });
   const [showFilters, setShowFilters] = useState(true);
   const toastTimeoutRef = useRef<number | null>(null);
@@ -97,7 +101,6 @@ function SearchSection({
   const isEmptyResults =
     hasSearched && !loading && filteredResults.length === 0;
 
-  const isFiltersCollapsed = hasSearched && !showFilters;
 
   const showToast = (
     message: string,
@@ -275,6 +278,9 @@ function SearchSection({
             <button
               type="button"
               onClick={() => setShowFilters((prev) => !prev)}
+              aria-expanded={showFilters}
+              aria-controls="filter-sort"
+              aria-label={showFilters ? 'Hide search filters' : 'Show search filters'}
               className="inline-flex items-center justify-center rounded-full border border-white/15 bg-white/10 px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.3em] text-white/80 transition hover:border-white/25 hover:bg-white/15"
             >
               {showFilters ? 'Hide refine' : 'Refine search'}
@@ -296,14 +302,15 @@ function SearchSection({
               />
             </div>
             <FilterSort filters={filters} onChange={setFilters} />
-            <div id="search-actions" className="flex flex-wrap items-center gap-3">
+            <div id="search-actions" className="flex flex-wrap items-center gap-3" role="group" aria-label="Search actions">
               <button
                 className="inline-flex items-center justify-center rounded-lg bg-white px-4 py-2 text-sm font-medium text-[#000522] transition hover:bg-white/90 disabled:cursor-not-allowed disabled:opacity-60"
                 type="button"
                 onClick={() => handleSearch(filters)}
                 disabled={loading}
+                aria-describedby="search-status"
               >
-                Search
+                {loading ? 'Searching...' : 'Search'}
               </button>
               <button
                 id="reset-filters"
@@ -311,10 +318,25 @@ function SearchSection({
                 type="button"
                 onClick={resetFilters}
                 disabled={loading && !hasSearched}
+                aria-label="Reset all search filters to default values"
               >
                 Reset filters
               </button>
             </div>
+            <div id="search-status" className="sr-only" aria-live="polite" aria-atomic="true">
+              {loading ? 'Searching for artworks...' : ''}
+            </div>
+          </>
+        )}
+      </div>
+
+      <div aria-live="polite" aria-atomic="true" className="sr-only">
+        {hasSearched && !loading && (
+          <>
+            {filteredResults.length > 0 
+              ? `Found ${filteredResults.length} artwork${filteredResults.length === 1 ? '' : 's'} matching your search.`
+              : 'No artworks found matching your search criteria.'
+            }
           </>
         )}
       </div>
