@@ -266,11 +266,11 @@ function SearchSection({
         onClose={hideToast}
       />
 
-      <div className={`rounded-2xl bg-white/5 backdrop-blur-sm ring-1 ring-white/10 transition-all ${showFilters ? 'space-y-6 p-6' : 'space-y-4 px-5 py-4'}`}>
+      <div className={`rounded-2xl bg-white/50 backdrop-blur-sm ring-1 ring-white/10 transition-all ${showFilters ? 'space-y-6 p-6' : 'space-y-4 px-5 py-4'}`}>
         <div className="flex items-start justify-between gap-4">
           <div>
-            <h2 className="text-2xl font-semibold text-white">Search the collections</h2>
-            <p className="text-sm text-slate-300/80">
+            <h2 className="text-2xl font-semibold text-[#1b1c17]">Search the collections</h2>
+            <p className="text-sm text-[#1b1c17]/80">
               Browse Met & Harvard picks and add them straight to your gallery.
             </p>
           </div>
@@ -281,7 +281,7 @@ function SearchSection({
               aria-expanded={showFilters}
               aria-controls="filter-sort"
               aria-label={showFilters ? 'Hide search filters' : 'Show search filters'}
-              className="inline-flex items-center justify-center rounded-full border border-white/15 bg-white/10 px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.3em] text-white/80 transition hover:border-white/25 hover:bg-white/15"
+              className="inline-flex items-center justify-center rounded-full border-2 border-[#1b1c17]/30 bg-[#F1F0E8] px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.3em] text-[#1b1c17] transition hover:border-[#1b1c17]/50 hover:bg-[#E5E1DA]"
             >
               {showFilters ? 'Hide refine' : 'Refine search'}
             </button>
@@ -304,7 +304,7 @@ function SearchSection({
             <FilterSort filters={filters} onChange={setFilters} />
             <div id="search-actions" className="flex flex-wrap items-center gap-3" role="group" aria-label="Search actions">
               <button
-                className="inline-flex items-center justify-center rounded-lg bg-white px-4 py-2 text-sm font-medium text-[#000522] transition hover:bg-white/90 disabled:cursor-not-allowed disabled:opacity-60"
+                className="inline-flex items-center justify-center rounded-lg bg-[#89A8B2] px-4 py-2 text-sm font-medium text-white transition hover:bg-[#89A8B2]/90 disabled:cursor-not-allowed disabled:opacity-60"
                 type="button"
                 onClick={() => handleSearch(filters)}
                 disabled={loading}
@@ -314,7 +314,7 @@ function SearchSection({
               </button>
               <button
                 id="reset-filters"
-                className="inline-flex items-center justify-center rounded-lg bg-white/10 px-4 py-2 text-sm font-medium text-white transition hover:bg-white/20 disabled:cursor-not-allowed disabled:opacity-60"
+                className="inline-flex items-center justify-center rounded-lg border-2 border-[#1b1c17]/30 bg-[#F1F0E8] px-4 py-2 text-sm font-medium text-[#1b1c17] transition hover:bg-[#E5E1DA] hover:border-[#1b1c17]/50 disabled:cursor-not-allowed disabled:opacity-60"
                 type="button"
                 onClick={resetFilters}
                 disabled={loading && !hasSearched}

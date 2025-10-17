@@ -129,16 +129,16 @@ function App() {
   };
   
   return (
-    <div className="app min-h-screen bg-gradient-to-b from-[#030711] via-[#050a1f] to-[#090f2e] text-white">
+    <div className="app min-h-screen bg-gradient-to-b from-[#89A8B2] via-[#B3C8CF] to-[#E5E1DA] text-[#1b1c17]">
       <a 
         href="#main-content" 
-        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:bg-white focus:text-black focus:px-4 focus:py-2 focus:rounded focus:outline-none focus:ring-2 focus:ring-indigo-400"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:bg-white focus:text-[#1b1c17] focus:px-4 focus:py-2 focus:rounded focus:outline-none focus:ring-2 focus:ring-[#89A8B2]"
       >
         Skip to main content
       </a>
       <a 
         href="#search" 
-        className="sr-only focus:not-sr-only focus:absolute focus:top-16 focus:left-4 focus:z-50 focus:bg-white focus:text-black focus:px-4 focus:py-2 focus:rounded focus:outline-none focus:ring-2 focus:ring-indigo-400"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-16 focus:left-4 focus:z-50 focus:bg-white focus:text-[#1b1c17] focus:px-4 focus:py-2 focus:rounded focus:outline-none focus:ring-2 focus:ring-[#89A8B2]"
       >
         Skip to search
       </a>

@@ -32,8 +32,8 @@ function ExhibitionNameForm({
 
   const cardClasses =
     variant === "compact"
-      ? "rounded-2xl bg-white/10 p-5 backdrop-blur-sm ring-1 ring-white/15 shadow-[0_18px_45px_-25px_rgba(99,102,241,0.55)]"
-      : "rounded-2xl bg-white/5 p-6 backdrop-blur-sm ring-1 ring-white/10"
+      ? "rounded-2xl bg-[#E5E1DA]/90 p-5 backdrop-blur-sm ring-1 ring-[#1b1c17]/20 shadow-[0_18px_45px_-25px_rgba(27,28,23,0.25)]"
+      : "rounded-2xl bg-[#E5E1DA]/80 p-6 backdrop-blur-sm ring-1 ring-[#1b1c17]/15"
 
   const showForm = !(variant === "compact" && collapsed)
 
@@ -42,22 +42,22 @@ function ExhibitionNameForm({
       <div className={`${cardClasses} space-y-5`}>
         <div className="flex items-start justify-between gap-4">
           <div className="space-y-2">
-            <p className="text-xs font-semibold uppercase tracking-[0.35em] text-indigo-200/80">
+            <p className="text-xs font-semibold uppercase tracking-[0.35em] text-[#1b1c17]/80 font-medium">
               Exhibition setup
             </p>
-            <h2 className="text-2xl font-semibold text-white">
+            <h2 className="text-2xl font-semibold text-[#1b1c17]">
               {exhibitionName?.trim() || 'Name your exhibition'}
             </h2>
             {showForm && (
-              <p className="text-sm text-slate-200/80">
+              <p className="text-sm text-[#5A6B73]">
                 Add a working title, story, and curatorial notes to anchor your exhibition.
               </p>
             )}
             {!showForm && (
-              <div className="space-y-1 text-sm text-slate-200/80">
+              <div className="space-y-1 text-sm text-[#5A6B73]">
                 {exhibitionDescription?.trim() && <p>{exhibitionDescription}</p>}
                 {exhibitionNotes?.trim() && (
-                  <p className="text-xs text-slate-300/70">Notes: {exhibitionNotes}</p>
+                  <p className="text-xs text-[#5A6B73]/80">Notes: {exhibitionNotes}</p>
                 )}
               </div>
             )}
@@ -67,7 +67,7 @@ function ExhibitionNameForm({
             <button
               type="button"
               onClick={onExpandToggle}
-              className="inline-flex items-center justify-center rounded-full border border-white/15 bg-white/10 px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.3em] text-white/80 transition hover:border-white/25 hover:bg-white/15"
+              className="inline-flex items-center justify-center rounded-full border-2 border-[#1b1c17]/30 bg-[#F1F0E8] px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.3em] text-[#1b1c17] transition hover:border-[#1b1c17]/50 hover:bg-[#E5E1DA]"
             >
               {collapsed ? 'Edit' : 'Collapse'}
             </button>
@@ -77,31 +77,31 @@ function ExhibitionNameForm({
         {showForm && (
           <>
             <form className="grid gap-4 md:grid-cols-3">
-              <label className="flex flex-col gap-1 text-sm text-white/80 md:col-span-1">
-                <span className="font-medium text-white">Exhibition title</span>
+              <label className="flex flex-col gap-1 text-sm text-[#5A6B73] md:col-span-1">
+                <span className="font-medium text-[#1b1c17]">Exhibition title</span>
                 <input
                   required
-                  className="rounded-lg border border-white/20 bg-white/5 px-3 py-2 text-white outline-none transition focus:border-white/40 focus:ring-2 focus:ring-indigo-500/60"
+                  className="rounded-lg border-2 border-[#1b1c17]/20 bg-[#F1F0E8] px-3 py-2 text-[#1b1c17] outline-none transition focus:border-[#1b1c17]/40 focus:ring-2 focus:ring-[#1b1c17]/20"
                   type="text"
                   value={exhibitionName}
                   onChange={(e) => setExhibitionName(e.target.value)}
                 />
               </label>
 
-              <label className="flex flex-col gap-1 text-sm text-white/80 md:col-span-1">
-                <span className="font-medium text-white">Description</span>
+              <label className="flex flex-col gap-1 text-sm text-[#5A6B73] md:col-span-1">
+                <span className="font-medium text-[#1b1c17]">Description</span>
                 <input
-                  className="rounded-lg border border-white/20 bg-white/5 px-3 py-2 text-white outline-none transition focus:border-white/40 focus:ring-2 focus:ring-indigo-500/60"
+                  className="rounded-lg border-2 border-[#1b1c17]/20 bg-[#F1F0E8] px-3 py-2 text-[#1b1c17] outline-none transition focus:border-[#1b1c17]/40 focus:ring-2 focus:ring-[#1b1c17]/20"
                   type="text"
                   value={exhibitionDescription}
                   onChange={(e) => setExhibitionDescription(e.target.value)}
                 />
               </label>
 
-              <label className="flex flex-col gap-1 text-sm text-white/80 md:col-span-1">
-                <span className="font-medium text-white">Notes (optional)</span>
+              <label className="flex flex-col gap-1 text-sm text-[#5A6B73] md:col-span-1">
+                <span className="font-medium text-[#1b1c17]">Notes (optional)</span>
                 <input
-                  className="rounded-lg border border-white/20 bg-white/5 px-3 py-2 text-white outline-none transition focus:border-white/40 focus:ring-2 focus:ring-indigo-500/60"
+                  className="rounded-lg border-2 border-[#1b1c17]/20 bg-[#F1F0E8] px-3 py-2 text-[#1b1c17] outline-none transition focus:border-[#1b1c17]/40 focus:ring-2 focus:ring-[#1b1c17]/20"
                   type="text"
                   value={exhibitionNotes}
                   onChange={(e) => setExhibitionNotes(e.target.value)}
@@ -111,7 +111,7 @@ function ExhibitionNameForm({
 
             <div className="flex flex-wrap items-center gap-3">
               <button
-                className="inline-flex items-center justify-center rounded-lg bg-white px-4 py-2 text-sm font-medium text-[#000522] transition hover:bg-white/90 disabled:cursor-not-allowed disabled:opacity-60"
+                className="inline-flex items-center justify-center rounded-lg border-2 border-[#1b1c17]/30 bg-[#1b1c17] px-4 py-2 text-sm font-medium text-[#F1F0E8] transition hover:bg-[#1b1c17]/90 hover:border-[#1b1c17]/50 disabled:cursor-not-allowed disabled:opacity-60"
                 type="button"
                 disabled={!exhibitionName.trim()}
                 onClick={() => {

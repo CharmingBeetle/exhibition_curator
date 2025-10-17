@@ -34,7 +34,7 @@ const SearchBar = ({ filters, onQueryChange, onSubmit, loading, resetKey }: Sear
         Search for artworks
       </label>
       <input
-        className="rounded-lg border border-white/20 bg-white/5 px-3 py-2 text-white outline-none transition focus:border-white/40 focus:ring-2 focus:ring-indigo-500/60"
+        className="rounded-lg border border-[#89A8B2]/30 bg-[#F1F0E8]/80 px-3 py-2 text-[#1b1c17] outline-none transition focus:border-[#89A8B2]/60 focus:ring-2 focus:ring-[#89A8B2]/60"
         id="search-input"
         type="text"
         value={query}

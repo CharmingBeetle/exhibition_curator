@@ -2,9 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --primary-text-color: #1b1c17;
+}
+
 @layer base {
   html, body {
     font-family: 'Poppins', sans-serif !important;
+    color: #1b1c17;
   }
   
   * {
@@ -25,7 +30,7 @@
 
   /* Focus styles for better visibility */
   .focus-visible:focus-visible {
-    outline: 2px solid #6366f1;
+    outline: 2px solid #89A8B2;
     outline-offset: 2px;
   }
 
@@ -71,5 +76,57 @@
     scroll-behavior: smooth;
     -webkit-overflow-scrolling: touch;
   }
+}
+
+/* Background slideshow styles */
+.each-fade {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+}
+
+.image-container {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* Ensure slideshow doesn't interfere with content */
+.react-slideshow-container {
+  position: absolute !important;
+  top: 0;
+  left: 0;
+  width: 100% !important;
+  height: 100% !important;
+  z-index: 0;
+}
+
+.react-slideshow-wrapper {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.react-slideshow-fade-wrapper {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.react-slideshow-fade-images-wrap {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* Additional styles to ensure images display */
+.react-slideshow-fade-images-wrap > div {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.react-slideshow-fade-images-wrap img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
 }
 

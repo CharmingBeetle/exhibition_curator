@@ -88,7 +88,7 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
       {/* Error State */}
       {hasError && (
         <div
-          className="absolute inset-0 bg-gray-200 flex items-center justify-center text-gray-500"
+          className="absolute inset-0 bg-gray-200 flex items-center justify-center text-[#5A6B73]"
           style={{ width, height }}
         >
           <div className="text-center">

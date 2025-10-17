@@ -74,7 +74,7 @@ function Navbar({ isOpen, setIsOpen, onNavigate }: NavbarProps) {
     <div
       ref={navRef}
       id="header-navigation"
-      className={`overflow-hidden border-t border-white/5 transition-[max-height,opacity] duration-500 ease-in-out ${
+      className={`bg-[#89A8B2]/60 overflow-hidden border-t border-[#1b1c17]/5 transition-[max-height,opacity] duration-500 ease-in-out ${
         isOpen ? "max-h-[640px] opacity-100" : "max-h-0 opacity-0"
       }`}
       aria-hidden={!isOpen}
@@ -89,26 +89,26 @@ function Navbar({ isOpen, setIsOpen, onNavigate }: NavbarProps) {
                 setIsOpen(false);
                 onNavigate?.(href);
               }}
-              className="group flex items-center justify-between rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-4 text-left transition duration-200 hover:-translate-y-0.5 hover:border-indigo-400/80 hover:bg-indigo-500/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400"
+              className="group flex items-center justify-between rounded-2xl border-2 border-[#1b1c17]/30 bg-[#E5E1DA]/80 px-4 py-4 text-left transition duration-200 hover:-translate-y-0.5 hover:border-[#1b1c17]/60 hover:bg-[#E5E1DA]/90 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#89A8B2]"
             >
               <span className="flex items-center gap-4">
-                <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/10 text-indigo-200 transition group-hover:bg-indigo-500/20 group-hover:text-indigo-100">
+                <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#1b1c17]/10 text-[#1b1c17] transition group-hover:bg-[#1b1c17]/20 group-hover:text-[#1b1c17]">
                   <Icon className="h-5 w-5" aria-hidden="true" />
                 </span>
                 <span className="flex flex-col">
-                  <span className="text-sm font-semibold text-white">{label}</span>
-                  <span className="text-xs text-slate-300/80">{description}</span>
+                  <span className="text-sm font-semibold text-[#1b1c17]">{label}</span>
+                  <span className="text-xs text-[#5A6B73]">{description}</span>
                 </span>
               </span>
-              <ChevronRightIcon className="h-4 w-4 text-indigo-200 transition group-hover:translate-x-1 group-hover:text-indigo-100" aria-hidden="true" />
+              <ChevronRightIcon className="h-4 w-4 text-[#1b1c17] transition group-hover:translate-x-1 group-hover:text-[#1b1c17]" aria-hidden="true" />
             </a>
           ))}
         </nav>
 
         <div className="grid gap-4 md:grid-cols-[minmax(0,1fr)_auto] md:items-center">
-          <div className="rounded-2xl border border-indigo-400/30 bg-indigo-500/10 p-4 text-sm text-indigo-100/90 shadow-[0_18px_35px_-20px_rgba(99,102,241,0.55)]">
-            <h3 className="text-sm font-semibold text-white">New to Assemblé?</h3>
-            <p className="mt-1 text-xs text-indigo-100/80">
+          <div className="rounded-2xl border-2 border-[#1b1c17]/30 bg-[#E5E1DA]/80 p-4 text-sm text-[#1b1c17] shadow-[0_18px_35px_-20px_rgba(27,28,23,0.25)]">
+            <h3 className="text-sm font-semibold text-[#1b1c17]">New to Assemblé?</h3>
+            <p className="mt-1 text-xs text-[#5A6B73]">
               Save exhibitions, invite collaborators, and publish immersive showcases.
             </p>
             <SignedOut>
@@ -119,7 +119,7 @@ function Navbar({ isOpen, setIsOpen, onNavigate }: NavbarProps) {
               </SignInButton>
             </SignedOut>
             <SignedIn>
-              <div className="mt-3 inline-flex w-full items-center justify-center rounded-xl border border-white/20 bg-white/5 px-3 py-2 text-xs font-medium text-white">
+              <div className="mt-3 inline-flex w-full items-center justify-center rounded-xl border border-white/20 bg-white/5 px-3 py-2 text-xs font-medium text-[#1b1c17]">
                 You’re signed in
               </div>
             </SignedIn>
@@ -132,14 +132,14 @@ function Navbar({ isOpen, setIsOpen, onNavigate }: NavbarProps) {
                 setIsOpen(false);
                 signOut();
               }}
-              className="inline-flex items-center justify-center rounded-xl border border-white/10 bg-white/10 px-4 py-3 text-sm font-semibold text-white transition hover:border-white/20 hover:bg-white/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400"
+              className="inline-flex items-center justify-center rounded-xl border-2 border-[#1b1c17]/30 bg-[#E5E1DA] px-4 py-3 text-sm font-semibold text-[#1b1c17] transition hover:border-[#1b1c17]/60 hover:bg-[#E5E1DA]/90 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#89A8B2]"
             >
               Sign out
             </button>
           </SignedIn>
         </div>
 
-        <div className="text-xs uppercase tracking-[0.3em] text-slate-500">
+        <div className="text-xs uppercase tracking-[0.3em] text-[#5A6B73]">
           © {new Date().getFullYear()} Assemblé
         </div>
       </div>
