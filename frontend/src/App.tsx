@@ -1,10 +1,10 @@
 import "./App.css";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import SearchSection from "./components/SearchSection";
 import ExhibitionSection from "./components/ExhibitionSection";
 import type { Artwork } from "./types/artwork";
 import ExhibitionNameForm from "./components/ExhibitionNameForm";
-import { SignedOut, SignedIn } from "@clerk/clerk-react";
+import { SignedOut, SignedIn, SignInButton } from "@clerk/clerk-react";
 import { useAppUser } from "./components/UserProvider";
 import Header from "./components/Header";
 import LandingHero from "./components/LandingHero";
@@ -23,6 +23,7 @@ function App() {
   const [isHydrated, setIsHydrated] = useState(false);
   const [isCreateCollapsed, setIsCreateCollapsed] = useState(false);
   const [showHero, setShowHero] = useState(true);
+  const signInButtonRef = useRef<HTMLButtonElement>(null);
 
   const { user, isSignedIn } = useAppUser();
 
@@ -122,12 +123,13 @@ function App() {
     const el = document.getElementById(id);
     if (el) {
       el.scrollIntoView({ behavior: "smooth", block: "start" });
+    } else {
+      console.warn(`Element with id "${id}" not found`);
     }
   };
   
   return (
     <div className="app min-h-screen bg-gradient-to-b from-[#030711] via-[#050a1f] to-[#090f2e] text-white">
-      {/* Skip navigation links for screen readers */}
       <a 
         href="#main-content" 
         className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:bg-white focus:text-black focus:px-4 focus:py-2 focus:rounded focus:outline-none focus:ring-2 focus:ring-indigo-400"
@@ -150,6 +152,16 @@ function App() {
           }
         }}
       />
+      
+      {/* Hidden SignInButton for programmatic triggering */}
+      <SignedOut>
+        <SignInButton mode="modal">
+          <button ref={signInButtonRef} className="sr-only" aria-hidden="true">
+            Hidden sign in button
+          </button>
+        </SignInButton>
+      </SignedOut>
+      
       {showHero && (
         <LandingHero
           hasCreatedExhibition={hasCreatedExhibition}
@@ -160,16 +172,18 @@ function App() {
           }}
           onShowExhibition={() => {
             setShowHero(false);
-            requestAnimationFrame(() => scrollTo("exhibition"));
+            setTimeout(() => {
+              scrollTo("exhibition");
+            }, 100);
           }}
           onOpenSignIn={() => {
-            setShowHero(false);
-            requestAnimationFrame(() => scrollTo("search"));
+            if (signInButtonRef.current) {
+              signInButtonRef.current.click();
+            }
           }}
         />
       )}
       <main id="main-content" className="relative z-10 mx-auto max-w-6xl px-6 pb-20 pt-12 space-y-12" role="main">
-        {/* Welcome message for signed-in users */}
         <SignedIn>
           <div className="rounded-3xl border border-white/10 bg-white/5 px-8 py-6 shadow-[0_20px_60px_-25px_rgba(99,102,241,0.5)]" role="region" aria-label="Welcome message">
             <h2 className="text-3xl font-semibold text-white">

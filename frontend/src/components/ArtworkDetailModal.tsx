@@ -50,7 +50,7 @@ function ArtworkDetailModal({ artwork, onClose }: ArtworkDetailModalProps) {
 
   return createPortal(
     <div
-      className="fixed inset-0 z-[60] flex items-center justify-center overflow-y-auto px-4 py-4"
+      className="fixed inset-0 z-[60] flex items-center justify-center overflow-y-auto px-4 py-4 sm:px-6"
       role="dialog"
       aria-modal="true"
       aria-labelledby="artwork-modal-title"
@@ -62,7 +62,7 @@ function ArtworkDetailModal({ artwork, onClose }: ArtworkDetailModalProps) {
         onClick={onClose}
       />
 
-      <article ref={modalRef} className="relative z-10 w-full max-w-2xl overflow-hidden rounded-[1.75rem] border border-white/10 bg-[#050a1f]/95 shadow-[0_32px_80px_-45px_rgba(99,102,241,0.7)]">
+      <article ref={modalRef} className="relative z-10 w-full max-w-2xl sm:max-w-3xl lg:max-w-4xl overflow-hidden rounded-[1.75rem] border border-white/10 bg-[#050a1f]/95 shadow-[0_32px_80px_-45px_rgba(99,102,241,0.7)]">
         <button
           ref={closeButtonRef}
           type="button"
@@ -78,7 +78,7 @@ function ArtworkDetailModal({ artwork, onClose }: ArtworkDetailModalProps) {
             <OptimizedImage
               src={fallbackImage}
               alt={artwork.title}
-              className="mx-auto max-h-[45vh] w-full object-contain"
+              className="mx-auto max-h-[60vh] sm:max-h-[65vh] lg:max-h-[70vh] w-full object-contain"
               width={800}
               height={1000}
               loading="eager"

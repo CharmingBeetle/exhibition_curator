@@ -8,7 +8,7 @@ interface LandingHeroProps {
   onOpenSignIn: () => void;
 }
 
-const LandingHero = ({}: LandingHeroProps) => {
+const LandingHero = ({ hasCreatedExhibition, isSignedIn, onStartSearch, onShowExhibition, onOpenSignIn }: LandingHeroProps) => {
   return (
     <section className="relative overflow-hidden bg-gradient-to-br from-indigo-600/20 via-transparent to-purple-500/10">
       <div className="absolute inset-0 bg-gradient-radial from-indigo-500/5 via-transparent to-transparent" />
@@ -39,6 +39,65 @@ const LandingHero = ({}: LandingHeroProps) => {
               Search from world-renowned collections, create a narrative, and
               present your exhibition in your own digital space.
             </p>
+            
+            {/* CTA Button */}
+            <div className="flex flex-col gap-4 sm:flex-row sm:gap-6">
+              {!isSignedIn ? (
+                <button
+                  onClick={onOpenSignIn}
+                  className="group relative inline-flex items-center justify-center gap-2 rounded-2xl border border-indigo-400/20 bg-gradient-to-r from-indigo-500/20 to-purple-500/20 px-8 py-4 text-base font-medium text-white shadow-[0_8px_32px_rgba(99,102,241,0.3)] backdrop-blur transition-all duration-300 hover:border-indigo-400/40 hover:from-indigo-500/30 hover:to-purple-500/30 hover:shadow-[0_12px_40px_rgba(99,102,241,0.4)] focus:outline-none focus:ring-2 focus:ring-indigo-400/50 focus:ring-offset-2 focus:ring-offset-transparent"
+                  aria-label="Sign in to start curating your exhibition"
+                >
+                  <span>Start Curating</span>
+                  <svg
+                    className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M13 7l5 5m0 0l-5 5m5-5H6"
+                    />
+                  </svg>
+                </button>
+              ) : (
+                <button
+                  onClick={onStartSearch}
+                  className="group relative inline-flex items-center justify-center gap-2 rounded-2xl border border-indigo-400/20 bg-gradient-to-r from-indigo-500/20 to-purple-500/20 px-8 py-4 text-base font-medium text-white shadow-[0_8px_32px_rgba(99,102,241,0.3)] backdrop-blur transition-all duration-300 hover:border-indigo-400/40 hover:from-indigo-500/30 hover:to-purple-500/30 hover:shadow-[0_12px_40px_rgba(99,102,241,0.4)] focus:outline-none focus:ring-2 focus:ring-indigo-400/50 focus:ring-offset-2 focus:ring-offset-transparent"
+                  aria-label="Start searching for artworks"
+                >
+                  <span>Start Searching</span>
+                  <svg
+                    className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M13 7l5 5m0 0l-5 5m5-5H6"
+                    />
+                  </svg>
+                </button>
+              )}
+              
+              {hasCreatedExhibition && (
+                <button
+                  onClick={onShowExhibition}
+                  className="inline-flex items-center justify-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-6 py-4 text-base font-medium text-slate-200 transition-all duration-300 hover:border-white/20 hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/20 focus:ring-offset-2 focus:ring-offset-transparent cursor-pointer"
+                  aria-label="View your current exhibition"
+                >
+                  <span>View Exhibition</span>
+                </button>
+              )}
+            </div>
           </div>
 
           <div className="relative mx-auto max-w-sm rounded-3xl border border-white/10 bg-black/30 p-6 shadow-[0_24px_60px_-25px_rgba(99,102,241,0.45)] backdrop-blur">
