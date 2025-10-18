@@ -1,162 +1,370 @@
-import { useState, useMemo, useEffect } from 'react'
-import SearchBar from './SearchBar'
-import FilterSort from './FilterSort'
-import { type SearchFilters } from '../types/artwork'
-import ResultsSection from './ResultsSection'
-import { type Artwork } from '../types/artwork'
-import { searchArtworks } from '../services/museumApi'
-import { applyFilters } from '../utils/applyFilters'
-import ArtworkDetailModal from './ArtworkDetailModal'
+import { useState, useMemo, useEffect, useRef } from "react";
+import SearchBar from "./SearchBar";
+import FilterSort from "./FilterSort";
+import { type SearchFilters } from "../types/artwork";
+import ResultsSection from "./ResultsSection";
+import { type Artwork } from "../types/artwork";
+import { searchArtworks } from "../services/museumApi";
+import { applyFilters } from "../utils/applyFilters";
+import ArtworkDetailModal from "./ArtworkDetailModal";
+import Toast from "./Toast";
 
 type SearchSectionProps = {
-  addToExhibition: (artwork: Artwork) => void
-  removeFromExhibition: (artwork: Artwork) => void
-  exhibition: Artwork[]
-}
+  addToExhibition: (artwork: Artwork) => void;
+  removeFromExhibition: (artwork: Artwork) => void;
+  exhibition: Artwork[];
+  pageSize: number;
+  onEnterSearch?: () => void;
+};
 
 const initialFilters: SearchFilters = {
-  query: '',
-  museum: 'all',
-  artist: '',
-  department: '',
-  medium: '',
-  classification: '',
-  country: '',
+  query: "",
+  museum: "all",
+  artist: "",
+  department: "",
+  medium: "",
+  classification: "",
+  country: "",
   dateFrom: null,
   dateTo: null,
-  sortBy: 'relevance',
-  sortOrder: 'asc',
-  hasImage: true
-}
+  sortBy: "relevance",
+  sortOrder: "asc",
+  hasImage: true,
+};
 
-function SearchSection({ addToExhibition, removeFromExhibition, exhibition }: SearchSectionProps) {
-  const [rawResults, setRawResults] = useState<Artwork[]>([])
-  const [filters, setFilters] = useState<SearchFilters>(initialFilters)
-  const [offset, setOffset] = useState(0)
-  const [hasMorePages, setHasMorePages] = useState(true)
-  const [loading, setLoading] = useState(false)
-  const [hasSearched, setHasSearched] = useState(false)
-  const [lastQuery, setLastQuery] = useState('')
-  const [resetKey, setResetKey] = useState(0)
-  const [selectedArtwork, setSelectedArtwork] = useState<Artwork | null>(null)
+function SearchSection({
+  addToExhibition,
+  removeFromExhibition,
+  exhibition,
+  pageSize,
+  onEnterSearch,
+}: SearchSectionProps) {
+  const [rawResults, setRawResults] = useState<Artwork[]>([]);
+  const [filters, setFilters] = useState<SearchFilters>(initialFilters);
+  const [offset, setOffset] = useState(0);
+  const [hasMorePages, setHasMorePages] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [hasSearched, setHasSearched] = useState(false);
+  const [lastQuery, setLastQuery] = useState("");
+  const [resetKey, setResetKey] = useState(0);
+  const [selectedArtwork, setSelectedArtwork] = useState<Artwork | null>(null);
+  const [toast, setToast] = useState<{
+    visible: boolean;
+    message: string;
+    type: "error" | "success" | "info";
+  }>({
+    visible: false,
+    message: "",
+    type: "info",
+  });
+  const [showFilters, setShowFilters] = useState(true);
+  const toastTimeoutRef = useRef<number | null>(null);
 
-  const filteredResults = useMemo(() => applyFilters(rawResults, filters), [rawResults, filters]) 
-  const isEmptyResults = hasSearched && !loading && filteredResults.length === 0
+  const filteredResults = useMemo(
+    () => applyFilters(rawResults, filters),
+    [rawResults, filters]
+  );
+
+  const appliedFilterTags = useMemo(() => {
+    const tags: string[] = []
+
+    if (filters.museum !== "all") {
+      tags.push(filters.museum === "met" ? "Museum: Met" : "Museum: Harvard")
+    }
+    if (filters.artist.trim()) {
+      tags.push(`Artist: ${filters.artist.trim()}`)
+    }
+    if (filters.department.trim()) {
+      tags.push(`Department: ${filters.department.trim()}`)
+    }
+    if (filters.medium.trim()) {
+      tags.push(`Medium: ${filters.medium.trim()}`)
+    }
+    if (filters.classification.trim()) {
+      tags.push(`Classification: ${filters.classification.trim()}`)
+    }
+    if (filters.country.trim()) {
+      tags.push(`Culture: ${filters.country.trim()}`)
+    }
+    if (filters.dateFrom !== null || filters.dateTo !== null) {
+      const from = filters.dateFrom ?? "Any"
+      const to = filters.dateTo ?? "Present"
+      tags.push(`Date: ${from} – ${to}`)
+    }
+    if (!filters.hasImage) {
+      tags.push("Has Image: No")
+    }
+
+    return tags
+  }, [filters])
+
+  const isEmptyResults =
+    hasSearched && !loading && filteredResults.length === 0;
+
+
+  const showToast = (
+    message: string,
+    type: "error" | "success" | "info" = "info",
+    autoDismissMs = 4000
+  ) => {
+    setToast({
+      visible: true,
+      message,
+      type,
+    });
+
+    if (toastTimeoutRef.current) {
+      window.clearTimeout(toastTimeoutRef.current);
+    }
+
+    toastTimeoutRef.current = window.setTimeout(() => {
+      hideToast();
+      toastTimeoutRef.current = null;
+    }, autoDismissMs);
+  };
+
+  const showErrorToast = (message: string) => {
+    showToast(message, "error");
+  };
+
+  const hideToast = () => {
+    if (toastTimeoutRef.current) {
+      window.clearTimeout(toastTimeoutRef.current);
+      toastTimeoutRef.current = null;
+    }
+    setToast((prev) => ({ ...prev, visible: false }));
+  };
 
   const handleSearch = async (searchFilters: SearchFilters) => {
-    setLoading(true)
-    setOffset(0)
-    setHasMorePages(true)
-    setFilters(searchFilters)
-    setHasSearched(true)
-    setLastQuery(searchFilters.query)
+    onEnterSearch?.();
+    setLoading(true);
+    setOffset(0);
+    setHasMorePages(true);
+    setFilters(searchFilters);
+    setHasSearched(true);
+    setLastQuery(searchFilters.query);
 
     try {
-      const results = await searchArtworks(searchFilters)
-      setRawResults(results)
+      const results = await searchArtworks(searchFilters);
+      setRawResults(results);
+      setHasMorePages(results.length > 0);
+      setShowFilters(false);
+
+      const filteredCount = applyFilters(results, searchFilters).length;
+
+      if (filteredCount > 0) {
+        showToast(
+          `Found ${filteredCount} artwork${filteredCount === 1 ? "" : "s"} matching your filters.`,
+          "success"
+        );
+      } else {
+        showToast(
+          searchFilters.query.trim()
+            ? `No artworks found for "${searchFilters.query}" with the current filters. Try adjusting them.`
+            : "No artworks matched your current filters.",
+          "info"
+        );
+      }
     } catch (error) {
-      setRawResults([])
+      setRawResults([]);
+      setHasMorePages(false);
+      showErrorToast("Unable to load artwork results. Please try again.");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const loadMore = async () => {
-    setLoading(true)
+    setLoading(true);
 
     try {
-      const newOffset = offset + 10
-      const newResults = await searchArtworks(filters, newOffset)
-
+      const newOffset = offset + pageSize;
+      const newResults = await searchArtworks(filters, newOffset);
       if (newResults.length === 0) {
-        setHasMorePages(false)
-        return
+        setHasMorePages(false);
+        showToast("No more artworks to load.", "info");
+        return;
       }
 
-      const existingIds = new Set(rawResults.map((result) => result.id))
-      const uniqueNewResults = newResults.filter((result) => !existingIds.has(result.id))
+      const existingIds = new Set(rawResults.map((result) => result.id));
+      const uniqueNewResults = newResults.filter(
+        (result) => !existingIds.has(result.id)
+      );
 
-      setRawResults((prev) => [...prev, ...uniqueNewResults])
-      setOffset(newOffset)
+      if (uniqueNewResults.length === 0) {
+        showToast("All loaded artworks are already in your results.", "info");
+      } else {
+        const updatedResults = [...rawResults, ...uniqueNewResults];
+        setRawResults(updatedResults);
+
+        const filteredCount = applyFilters(updatedResults, filters).length;
+        showToast(
+          `Loaded ${uniqueNewResults.length} more artwork${
+            uniqueNewResults.length === 1 ? "" : "s"
+          }. ${filteredCount} currently visible after filters.`,
+          "success"
+        );
+      }
+      setOffset(newOffset);
     } catch (error) {
-      console.error('Error loading more results:', error)
+      setHasMorePages(false);
+      showErrorToast("Unable to load more artwork results. Please try again.");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const resetFilters = () => {
-    setFilters(initialFilters)
-    setRawResults([])
-    setHasMorePages(true)
-    setHasSearched(false)
-    setOffset(0)
-    setLastQuery('')
-    setResetKey((value) => value + 1) //reset key to force re-render
-  }
+    setFilters(initialFilters);
+    setResetKey((value) => value + 1);
+    setShowFilters(true);
+  };
+
+  const resetSearch = () => {
+    resetFilters();
+    setRawResults([]);
+    setHasSearched(false);
+    setHasMorePages(true);
+    setOffset(0);
+    setLastQuery("");
+    setSelectedArtwork(null);
+    hideToast();
+
+    if (typeof window !== "undefined") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
+
+  useEffect(() => {
+    return () => {
+      if (toastTimeoutRef.current) {
+        window.clearTimeout(toastTimeoutRef.current);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     if (hasSearched && filters.query.trim()) {
-      handleSearch(filters)
+      handleSearch(filters);
     }
-  }, [filters.artist, filters.department, filters.medium, filters.classification, filters.country, filters.dateFrom, filters.dateTo])
+  }, [
+    filters.artist,
+    filters.department,
+    filters.medium,
+    filters.classification,
+    filters.country,
+    filters.dateFrom,
+    filters.dateTo,
+  ]);
 
   return (
-  <section>
-  <h2>Search</h2>
-  <div className="search-controls">
-    <SearchBar
-      filters={filters}
-      onQueryChange={(value) => setFilters((prev) => ({ ...prev, query: value }))}
-      onSubmit={() => handleSearch(filters)}
-      loading={loading}
-      resetKey={resetKey}
-    />
+    <section id="search" className="space-y-8 text-left">
+      <Toast
+        message={toast.message}
+        type={toast.type}
+        isVisible={toast.visible}
+        onClose={hideToast}
+      />
 
-    <FilterSort
-      filters={filters}
-      onChange={setFilters}
-    />
+      <div className={`rounded-2xl bg-white/50 backdrop-blur-sm ring-1 ring-white/10 transition-all ${showFilters ? 'space-y-6 p-6' : 'space-y-4 px-5 py-4'}`}>
+        <div className="flex items-start justify-between gap-4">
+          <div>
+            <h2 className="text-2xl font-semibold text-[#1b1c17]">Search the collections</h2>
+            <p className="text-sm text-[#1b1c17]/80">
+              Browse Met & Harvard picks and add them straight to your gallery.
+            </p>
+          </div>
+          {hasSearched && (
+            <button
+              type="button"
+              onClick={() => setShowFilters((prev) => !prev)}
+              aria-expanded={showFilters}
+              aria-controls="filter-sort"
+              aria-label={showFilters ? 'Hide search filters' : 'Show search filters'}
+              className="inline-flex items-center justify-center rounded-full border-2 border-[#1b1c17]/30 bg-[#F1F0E8] px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.3em] text-[#1b1c17] transition hover:border-[#1b1c17]/50 hover:bg-[#E5E1DA]"
+            >
+              {showFilters ? 'Hide refine' : 'Refine search'}
+            </button>
+          )}
+        </div>
 
-    <div className="search-actions">
-      <button
-        type="button"
-        onClick={() => handleSearch(filters)}
-        disabled={loading}
-      >
-        Search
-      </button>
+        {showFilters && (
+          <>
+            <div className="flex flex-col gap-4 md:flex-row md:items-end">
+              <SearchBar
+                filters={filters}
+                onQueryChange={(value) =>
+                  setFilters((prev) => ({ ...prev, query: value }))
+                }
+                onSubmit={() => handleSearch(filters)}
+                loading={loading}
+                resetKey={resetKey}
+              />
+            </div>
+            <FilterSort filters={filters} onChange={setFilters} />
+            <div id="search-actions" className="flex flex-wrap items-center gap-3" role="group" aria-label="Search actions">
+              <button
+                className="inline-flex items-center justify-center rounded-lg bg-[#89A8B2] px-4 py-2 text-sm font-medium text-white transition hover:bg-[#89A8B2]/90 disabled:cursor-not-allowed disabled:opacity-60"
+                type="button"
+                onClick={() => handleSearch(filters)}
+                disabled={loading}
+                aria-describedby="search-status"
+              >
+                {loading ? 'Searching...' : 'Search'}
+              </button>
+              <button
+                id="reset-filters"
+                className="inline-flex items-center justify-center rounded-lg border-2 border-[#1b1c17]/30 bg-[#F1F0E8] px-4 py-2 text-sm font-medium text-[#1b1c17] transition hover:bg-[#E5E1DA] hover:border-[#1b1c17]/50 disabled:cursor-not-allowed disabled:opacity-60"
+                type="button"
+                onClick={resetFilters}
+                disabled={loading && !hasSearched}
+                aria-label="Reset all search filters to default values"
+              >
+                Reset filters
+              </button>
+            </div>
+            <div id="search-status" className="sr-only" aria-live="polite" aria-atomic="true">
+              {loading ? 'Searching for artworks...' : ''}
+            </div>
+          </>
+        )}
+      </div>
 
-      <button
-        type="button"
-        onClick={resetFilters}
-        disabled={loading && !hasSearched}
-      >
-        Reset Filters
-      </button>
-    </div>
-  </div>
-    <hr />
-    <br />
-    <ResultsSection
-      results={filteredResults}
-      addToExhibition={addToExhibition}
-      removeFromExhibition={removeFromExhibition}
-      hasMorePages={hasMorePages}
-      loadMore={loadMore}
-      loading={loading}
-      exhibition={exhibition}
-      isEmptyResults={isEmptyResults}
-      query={lastQuery}
-      onArtworkClick={setSelectedArtwork}
-    />
+      <div aria-live="polite" aria-atomic="true" className="sr-only">
+        {hasSearched && !loading && (
+          <>
+            {filteredResults.length > 0 
+              ? `Found ${filteredResults.length} artwork${filteredResults.length === 1 ? '' : 's'} matching your search.`
+              : 'No artworks found matching your search criteria.'
+            }
+          </>
+        )}
+      </div>
 
-    {selectedArtwork && 
-    <ArtworkDetailModal 
-    artwork={selectedArtwork} 
-    onClose={() => setSelectedArtwork(null)} />}
-  </section>
-)
+      <ResultsSection
+        results={filteredResults}
+        addToExhibition={addToExhibition}
+        removeFromExhibition={removeFromExhibition}
+        hasMorePages={hasMorePages}
+        loadMore={loadMore}
+        loading={loading}
+        exhibition={exhibition}
+        isEmptyResults={isEmptyResults}
+        query={lastQuery}
+        onArtworkClick={setSelectedArtwork}
+        onReset={resetSearch}
+        activeFilters={appliedFilterTags}
+      />
+
+      {selectedArtwork && (
+        <ArtworkDetailModal
+          artwork={selectedArtwork}
+          onClose={() => setSelectedArtwork(null)}
+        />
+      )}
+     
+    </section>
+  );
 }
 
-export default SearchSection
+export default SearchSection;

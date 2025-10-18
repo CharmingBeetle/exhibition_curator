@@ -1,68 +1,132 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  --primary-text-color: #1b1c17;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
+@layer base {
+  html, body {
+    font-family: 'Poppins', sans-serif !important;
+    color: #1b1c17;
+  }
+  
+  * {
+    font-family: 'Poppins', sans-serif;
+  }
+
+  /* Accessibility improvements */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+
+  /* Focus styles for better visibility */
+  .focus-visible:focus-visible {
+    outline: 2px solid #89A8B2;
+    outline-offset: 2px;
+  }
+
+  /* High contrast mode support */
+  @media (prefers-contrast: high) {
+    .bg-white\/5 {
+      background-color: rgba(255, 255, 255, 0.1) !important;
+    }
+    .border-white\/10 {
+      border-color: rgba(255, 255, 255, 0.2) !important;
+    }
+    .text-white\/80 {
+      color: rgba(255, 255, 255, 0.9) !important;
+    }
+  }
+
+  /* Performance optimizations */
+  * {
+    box-sizing: border-box;
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* Optimize font loading */
+  @font-face {
+    font-family: 'Poppins';
+    font-display: swap;
+  }
+
+  /* GPU acceleration for animations */
+  .animate-spin,
+  .transition-transform,
+  .group-hover\:scale-105 {
+    will-change: transform;
+  }
+
+  /* Optimize scrolling */
+  .overflow-auto,
+  .overflow-x-auto {
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+  }
 }
 
-body {
-  margin: 0;
+/* Background slideshow styles */
+.each-fade {
   display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+.image-container {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
 }
 
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+/* Ensure slideshow doesn't interfere with content */
+.react-slideshow-container {
+  position: absolute !important;
+  top: 0;
+  left: 0;
+  width: 100% !important;
+  height: 100% !important;
+  z-index: 0;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+.react-slideshow-wrapper {
+  width: 100% !important;
+  height: 100% !important;
 }
+
+.react-slideshow-fade-wrapper {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.react-slideshow-fade-images-wrap {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* Additional styles to ensure images display */
+.react-slideshow-fade-images-wrap > div {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.react-slideshow-fade-images-wrap img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+}
+

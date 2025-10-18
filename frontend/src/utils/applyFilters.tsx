@@ -4,6 +4,11 @@ import { type SearchFilters, type Artwork } from '../types/artwork'
 const sortArtworks = (artworks: Artwork[], filters: SearchFilters): Artwork[] => {
   const sorted = [...artworks]
 
+  if (filters.sortBy === 'relevance') {
+    sorted.sort((a, b) => (b.score ?? 0) - (a.score ?? 0))
+    return filters.sortOrder === 'asc' ? sorted : sorted.reverse()
+  }
+
   if (filters.sortBy === 'artist') {
     sorted.sort((a, b) => (a.artist ?? '').localeCompare(b.artist ?? '', 'en', { sensitivity: 'base' }))
   } else if (filters.sortBy === 'title') {
@@ -36,7 +41,6 @@ const matchesQuery = (artwork: Artwork, query: string): boolean => {
     .map((value) => value?.toLowerCase() ?? '') 
 
   const tagTerms = artwork.tags?.map((tag) => tag.term?.toLowerCase() ?? '') ?? []
-
   return [...fields, ...tagTerms].some((value) => value.includes(normalizedQuery))
 }
 
@@ -123,11 +127,16 @@ export const applyFilters = (artworks: Artwork[], filters: SearchFilters): Artwo
     return sortArtworks(baseList, filters)
   }
   //if query is not empty, return filtered artworks
-  const primaryMatches = baseList.filter((artwork) => matchesQuery(artwork, filters.query)) //filter artworks that match query
+  const primaryMatches = baseList.filter((artwork) => matchesQuery(artwork, filters.query))
 
   if (primaryMatches.length === 0) {
-    return []
+    return sortArtworks(baseList, filters)
   }
 
-  return sortArtworks(primaryMatches, filters)
+  const matchedIds = new Set(primaryMatches.map((artwork) => artwork.id))
+  const secondaryMatches = baseList.filter((artwork) => !matchedIds.has(artwork.id))
+  return [
+    ...sortArtworks(primaryMatches, filters),
+    ...sortArtworks(secondaryMatches, filters)
+  ]
 }

@@ -1,5 +1,5 @@
 export type Artwork = {
-  id: number
+  id: number | string
   title: string
   artist?: string | "Unknown"
   image?: string
@@ -18,6 +18,7 @@ export type Artwork = {
   museumUrl?: string
   isHighlight?: boolean
   tags?: ArtworkTag[]
+  score?: number
 }
 
 export type SearchFilters = {
