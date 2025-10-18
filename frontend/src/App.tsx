@@ -23,6 +23,7 @@ function App() {
   const [isHydrated, setIsHydrated] = useState(false);
   const [isCreateCollapsed, setIsCreateCollapsed] = useState(false);
   const [showHero, setShowHero] = useState(true);
+  const [showExhibitionForm, setShowExhibitionForm] = useState(false);
   const signInButtonRef = useRef<HTMLButtonElement>(null);
 
   const { user, isSignedIn } = useAppUser();
@@ -46,6 +47,7 @@ function App() {
     setHasCreatedExhibition(false);
     setIsCreateCollapsed(false);
     setShowHero(true);
+    setShowExhibitionForm(false);
     localStorage.removeItem(localStorageKey);
   };
 
@@ -165,51 +167,48 @@ function App() {
       {showHero && (
         <LandingHero
           hasCreatedExhibition={hasCreatedExhibition}
-          isSignedIn={isSignedIn}
-          onStartSearch={() => {
-            setShowHero(false);
-            requestAnimationFrame(() => scrollTo("search"));
-          }}
           onShowExhibition={() => {
             setShowHero(false);
             setTimeout(() => {
               scrollTo("exhibition");
             }, 100);
           }}
-          onOpenSignIn={() => {
-            if (signInButtonRef.current) {
-              signInButtonRef.current.click();
-            }
+          onStartExhibition={() => {
+            setShowExhibitionForm(true);
+            setShowHero(false);
+            requestAnimationFrame(() => scrollTo("create"));
           }}
         />
       )}
-      <main id="main-content" className="relative z-10 mx-auto max-w-6xl px-6 pb-20 pt-12 space-y-12" role="main">
+      <main id="main-content" className="relative z-10 mx-auto max-w-6xl px-6 pt-6 space-y-12" role="main">
         <SignedIn>
-          <div className="rounded-3xl border border-white/10 bg-white/5 px-8 py-6 shadow-[0_20px_60px_-25px_rgba(99,102,241,0.5)]" role="region" aria-label="Welcome message">
-            <h2 className="text-3xl font-semibold text-white">
+          <div className="rounded-2xl border-2 border-[#1b1c17]/20 bg-[#E5E1DA]/90 px-6 py-5 shadow-[0_18px_45px_-25px_rgba(27,28,23,0.25)] backdrop-blur-sm" role="region" aria-label="Welcome message">
+            <h2 className="text-2xl font-semibold text-[#1b1c17]">
               Welcome back, {user?.firstName}
             </h2>
-            <p className="mt-2 text-sm text-slate-200/80">
+            <p className="mt-2 text-sm text-[#5A6B73]">
               Continue curating and refining your exhibition, and share your vision.
             </p>
           </div>
         </SignedIn>
 
-        <ExhibitionNameForm
-          exhibitionName={exhibitionName}
-          setExhibitionName={setExhibitionName}
-          exhibitionDescription={exhibitionDescription}
-          setExhibitionDescription={setExhibitionDescription}
-          exhibitionNotes={exhibitionNotes}
-          setExhibitionNotes={setExhibitionNotes}
-          onCreate={() => {
-            setHasCreatedExhibition(true);
-            setIsCreateCollapsed(true);
-          }}
-          variant="compact"
-          collapsed={isCreateCollapsed}
-          onExpandToggle={() => setIsCreateCollapsed((prev) => !prev)}
-        />
+        {showExhibitionForm && (
+          <ExhibitionNameForm
+            exhibitionName={exhibitionName}
+            setExhibitionName={setExhibitionName}
+            exhibitionDescription={exhibitionDescription}
+            setExhibitionDescription={setExhibitionDescription}
+            exhibitionNotes={exhibitionNotes}
+            setExhibitionNotes={setExhibitionNotes}
+            onCreate={() => {
+              setHasCreatedExhibition(true);
+              setIsCreateCollapsed(true);
+              setShowExhibitionForm(false);
+            }}
+            variant="default"
+            collapsed={false}
+          />
+        )}
 
         <section className="space-y-8">
           {hasCreatedExhibition && (

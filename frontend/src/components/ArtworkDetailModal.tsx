@@ -17,11 +17,11 @@ function ArtworkDetailModal({ artwork, onClose }: ArtworkDetailModalProps) {
       if (event.key === 'Escape') onClose()
     }
 
-    // Focus management
+  
     const previousActiveElement = document.activeElement as HTMLElement
     closeButtonRef.current?.focus()
 
-    // Prevent body scroll
+  
     document.body.style.overflow = 'hidden'
 
     window.addEventListener('keydown', handleEsc)

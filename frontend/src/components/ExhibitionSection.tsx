@@ -147,7 +147,10 @@ function ExhibitionSection({
                     </div>
                     <button
                       type="button"
-                      onClick={() => removeFromExhibition(artwork)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        removeFromExhibition(artwork);
+                      }}
                       className="absolute right-2 top-2 rounded-full border border-[#1b1c17]/30 bg-[#E5E1DA]/90 px-2 py-0.5 text-[0.6rem] font-semibold uppercase tracking-[0.2em] text-[#1b1c17] transition hover:bg-[#F1F0E8] hover:border-[#1b1c17]/50"
                     >
                       Remove

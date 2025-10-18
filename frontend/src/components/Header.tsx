@@ -12,7 +12,7 @@ const Header = ({ onNavigate }: HeaderProps) => {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-[#89A8B2]/20 bg-gradient-to-b from-[#F1F0E8]/60 via-[#E5E1DA]/50 to-[#B3C8CF]/40 backdrop-blur">
-      <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-6">
+      <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-6 py-8">
         <div className="flex flex-col gap-1">
           <a
             href="#home"
@@ -24,7 +24,7 @@ const Header = ({ onNavigate }: HeaderProps) => {
             <img
               src={logoOffblack}
               alt="Assemblé logo"
-              className="h-40 w-auto drop-shadow-[0_0_25px_rgba(148,163,255,0.35)]"
+              className="h-10 w-auto drop-shadow-[0_0_25px_rgba(148,163,255,0.35)]"
             />
           </a>
         </div>
