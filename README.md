@@ -2,6 +2,10 @@
 
 A high-performance web application for creating virtual exhibitions from museum collections using multiple museum APIs. Features enterprise-level performance with a **98/100 Lighthouse score** and comprehensive accessibility support.
 
+### Live Demo
+<!-- Netlify URL here -->
+**Live Site**: [Coming soon - will be updated after deployment]
+
 ## Project Setup
 
 ### Tech Stack
@@ -10,7 +14,7 @@ A high-performance web application for creating virtual exhibitions from museum 
 - **APIs**: Metropolitan Museum of Art API + Harvard Art Museums API
 - **Styling**: Tailwind CSS
 - **Performance**: Optimized with lazy loading, code splitting, and image optimization
-- **Deployment**: Frontend-only (Vercel/Netlify ready)
+- **Deployment**: Frontend-only (Netlify ready)
 
 ### Project Structure
 ```
@@ -71,12 +75,6 @@ exhibition_curator/
 - **Performance**: 98/100 Lighthouse score with lazy loading and code splitting
 - **SEO Optimized**: Meta tags, sitemap, and robots.txt
 
-### 🔄 In Development
-- [ ] Persistent exhibitions (save to database)
-- [ ] Social sharing features
-- [ ] Advanced filtering options
-- [ ] Exhibition templates
-
 ## 🚀 Performance & Accessibility
 
 ### Lighthouse Scores
@@ -115,7 +113,28 @@ npm run preview
 npm run type-check
 ```
 
-### Future Enhancements
+## 🚀 Deployment
+
+### Netlify Deployment
+This project is optimized for Netlify deployment:
+
+1. **Build Settings**:
+   - Build command: `npm run build`
+   - Publish directory: `frontend/dist`
+   - Node version: 18.x
+
+2. **Environment Variables** (set in Netlify dashboard):
+   ```
+   VITE_CLERK_PUBLISHABLE_KEY=your_clerk_key_here
+   ```
+
+3. **Deploy**:
+   - Connect your GitHub repository to Netlify
+   - Netlify will automatically build and deploy on every push to main branch
+
+
+
+## 🔮 Future Enhancements
 - Backend API for data persistence
 - Additional museum APIs (MoMA, Guggenheim, etc.)
 - Advanced exhibition sharing and collaboration
