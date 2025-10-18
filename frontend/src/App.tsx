@@ -155,7 +155,6 @@ function App() {
         }}
       />
       
-      {/* Hidden SignInButton for programmatic triggering */}
       <SignedOut>
         <SignInButton mode="modal">
           <button ref={signInButtonRef} className="sr-only" aria-hidden="true">

@@ -11,7 +11,7 @@ const LandingHero = ({ hasCreatedExhibition, onShowExhibition, onStartExhibition
     <section className="relative overflow-hidden bg-gradient-to-br from-[#89A8B2]/20 via-transparent to-[#B3C8CF]/10 min-h-[60vh]">
       <BackgroundImage className="pointer-events-none" />
       
-      {/* Overlay to ensure text readability */}
+      
       <div className="absolute inset-0 bg-black/5" />
       <div className="absolute inset-0 bg-gradient-radial from-[#89A8B2]/15 via-transparent to-transparent" />
       <div className="absolute inset-0 bg-gradient-to-br from-transparent via-[#B3C8CF]/8 to-[#E5E1DA]/10" />
@@ -27,7 +27,7 @@ const LandingHero = ({ hasCreatedExhibition, onShowExhibition, onStartExhibition
               present your exhibition in your own digital space.
             </p>
             
-            {/* CTA Button */}
+            
             <div className="flex flex-col gap-4 sm:flex-row sm:gap-6">
               <button
                 onClick={onStartExhibition}

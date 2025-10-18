@@ -3,8 +3,8 @@
 A high-performance web application for creating virtual exhibitions from museum collections using multiple museum APIs. Features enterprise-level performance with a **98/100 Lighthouse score** and comprehensive accessibility support.
 
 ### Live Demo
-<!-- Netlify URL here -->
-**Live Site**: [Coming soon - will be updated after deployment]
+
+**Live Site**: [https://assemble-gallery-curator.netlify.app/]
 
 ## Project Setup
 
