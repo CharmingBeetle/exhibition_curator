@@ -4,7 +4,13 @@ A high-performance web application for creating virtual exhibitions from museum 
 
 ### Live Demo
 
-**Live Site**: [https://assemble-gallery-curator.netlify.app/]
+**Live Site**: [Website](https://assemble-gallery-curator.netlify.app/)
+
+### Video Demo
+[Presentation Video](https://www.canva.com/design/DAG2OAAC_ss/11oq_WE-tCgstkBSiaCtAQ/watch?utm_content=DAG2OAAC_ss&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=h6356776ca4)
+
+![Video Thumbnail](./frontend/src/assets/Screenshot%202025-10-18%20at%2015.25.29.png)
+
 
 ## Project Setup
 
@@ -36,32 +42,75 @@ exhibition_curator/
 └── README.md
 ```
 
+### Prerequisites
+
+Before you begin, ensure you have the following installed:
+- **Node.js** (version 18 or higher)
+- **npm** (comes with Node.js)
+- **Git** (for cloning the repository)
+
+**Note**: TypeScript and all other dependencies will be automatically installed when you run `npm install` in the frontend directory.
+
 ### Getting Started
 
-1. **Install dependencies:**
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/CharmingBeetle/exhibition_curator.git
+   cd exhibition_curator
+   ```
+
+2. **Install dependencies:**
    ```bash
    cd frontend
    npm install
    ```
 
-2. **Set up environment variables:**
+3. **Set up environment variables:**
+   Create a `.env` file in the `frontend` directory:
    ```bash
-   # Create .env file in frontend directory
+   # In frontend/.env
    VITE_CLERK_PUBLISHABLE_KEY=your_clerk_key_here
+   VITE_HARVARD_API_KEY=your_harvard_api_key_here
    ```
+   
+   **Note**: You can get a Clerk key from [clerk.com](https://clerk.com) and a Harvard API key from [harvardartmuseums.org](https://harvardartmuseums.org/collections/api).
 
-3. **Start development server:**
+4. **Start development server:**
    ```bash
    npm run dev
    ```
 
-4. **Open browser:**
+5. **Open browser:**
    Navigate to `http://localhost:3001` (or the port shown in terminal)
+   
+   The app should now be running locally! 🎉
 
 ### API Keys
 - **Metropolitan Museum**: No key required
 - **Harvard Art Museums**: API key stored in `frontend/.env`
 - **Clerk Authentication**: Required for user management
+
+### Troubleshooting
+
+**Common Issues:**
+
+1. **Port already in use**: If port 3001 is busy, Vite will automatically use the next available port (3002, 3003, etc.)
+
+2. **Environment variables not working**: Make sure your `.env` file is in the `frontend` directory and restart the dev server
+
+3. **Build errors**: Try deleting `node_modules` and running `npm install` again:
+   ```bash
+   rm -rf node_modules package-lock.json
+   npm install
+   ```
+
+4. **Authentication not working**: Ensure your Clerk publishable key is correct and starts with `pk_test_` or `pk_live_`
+
+5. **TypeScript compilation errors**: The project uses TypeScript with Vite. If you see TypeScript errors, try:
+   ```bash
+   npm run type-check
+   ```
+   This will show any TypeScript issues that need to be resolved.
 
 ## ✨ Features
 
